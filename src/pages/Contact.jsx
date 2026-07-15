@@ -16,20 +16,23 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
+    <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col pt-20">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative min-h-[50vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-24 pb-12">
+      <div className="relative h-[40vh] bg-luxury-bg overflow-hidden flex items-center justify-center">
         <img 
           src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1600&q=80" 
           alt="Contact Us" 
           className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay"
         />
         <div className="relative z-10 text-center px-4 max-w-3xl">
-          <h1 className="text-5xl font-black text-luxury-gold mb-4 uppercase tracking-widest font-serif">
+          <h1 className="text-4xl sm:text-5xl font-black text-luxury-gold mb-1 uppercase tracking-widest font-serif">
             Get in Touch
           </h1>
+          <h2 className="text-2xl sm:text-3xl font-bold text-luxury-text mb-4 font-serif" dir="rtl">
+            ہم سے رابطہ کریں
+          </h2>
           <div className="w-16 h-1 bg-luxury-red mx-auto"></div>
         </div>
       </div>
