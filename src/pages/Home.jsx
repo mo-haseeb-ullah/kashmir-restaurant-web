@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, ShoppingCart, Search as SearchIcon, X, Star, Utensils, ChefHat, Flame } from 'lucide-react';
+import { MessageCircle, ShoppingCart, Search as SearchIcon, X, Star, Utensils, ChefHat, Flame, Plus } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
@@ -175,51 +175,43 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Menu Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8 px-1 md:px-0">
-          {filteredMenu.map(item => (
-            <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group flex flex-col">
-              
-              {/* Image Container */}
-              <div className="w-full h-28 md:h-56 relative overflow-hidden">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" 
-                />
-                <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-[#111827] px-2 py-0.5 md:px-3 md:py-1 font-black text-[10px] md:text-sm rounded-full shadow-sm">
-                  Rs. {item.price}
+        {/* Menu Grid - Salt n Pepper Style */}
+        <div className="bg-black pt-6 pb-20">
+          <h2 className="text-white text-center font-serif text-2xl font-bold mb-8">Our Deals</h2>
+          
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2">
+            {filteredMenu.map(item => (
+              <div key={item.id} className="bg-black flex flex-col items-center group cursor-pointer pb-4">
+                
+                {/* Image */}
+                <div className="w-full aspect-square overflow-hidden mb-3">
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" 
+                  />
                 </div>
-              </div>
-              
-              {/* Content Container */}
-              <div className="p-3 md:p-5 flex flex-col flex-grow">
-                <p className="text-gray-400 text-[9px] md:text-xs font-bold tracking-widest uppercase mb-1 truncate">{item.category}</p>
                 
-                <h4 className="font-bold text-[13px] md:text-xl text-[#111827] mb-1 leading-tight line-clamp-1">{item.name}</h4>
+                {/* Title */}
+                <h4 className="text-white text-[11px] md:text-sm font-bold text-center leading-tight mb-2 px-1 line-clamp-2">
+                  {item.name}
+                </h4>
                 
-                {/* Ratings */}
-                <div 
-                  className="flex items-center gap-1 text-[#D4AF37] mb-2 cursor-pointer"
-                  onClick={() => setReviewModalItem(item)}
-                >
-                  <Star size={12} fill="currentColor" />
-                  <span className="text-[10px] md:text-sm font-bold text-[#111827]">{(4.0 + (item.id % 10) / 10).toFixed(1)}</span>
-                  <span className="text-[9px] md:text-xs text-gray-400 ml-1">({(item.id * 13 + 42)})</span>
+                {/* Price */}
+                <div className="text-[#D4AF37] text-[10px] md:text-xs font-bold mb-3">
+                  Rs {item.price}.00
                 </div>
-
-                <p className="text-gray-500 text-[10px] md:text-sm mb-3 md:mb-5 flex-grow line-clamp-2 leading-snug hidden md:block">{item.desc}</p>
                 
+                {/* Add Button */}
                 <button 
                   onClick={() => handleDirectAddToCart(item)}
-                  className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white py-2 md:py-3 font-bold uppercase tracking-wider text-[10px] md:text-sm rounded-lg transition-colors mt-auto flex items-center justify-center gap-1.5"
+                  className="bg-red-600 hover:bg-red-700 text-white w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-[2px] transition-colors"
                 >
-                  <ShoppingCart size={14} className="md:w-5 md:h-5" />
-                  <span>Add</span>
+                  <Plus size={14} className="md:w-4 md:h-4" />
                 </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Reviews Modal */}
