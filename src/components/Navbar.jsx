@@ -46,40 +46,42 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-black text-white sticky top-0 z-50 border-b border-gray-900">
+      <nav className="fixed w-full z-50 transition-all duration-300 bg-luxury-card shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 md:h-20 relative">
+          <div className="flex justify-between items-center h-16 md:h-20">
             
             {/* Mobile Left: Hamburger */}
-            <button 
-              className="md:hidden text-white p-1"
-              onClick={() => setIsMobileMenuOpen(true)}
-            >
-              <Menu size={24} />
-            </button>
+            <div className="md:hidden flex items-center">
+              <button 
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="text-luxury-text hover:text-luxury-gold transition p-1 -ml-1"
+              >
+                <Menu size={24} />
+              </button>
+            </div>
 
             {/* Desktop Left: Logo */}
             <Link to="/" className="hidden md:flex items-center gap-3">
-              <div className="bg-[#D4AF37] p-2 rounded-full text-[#111827]">
+              <div className="bg-luxury-gold p-2 rounded-full text-luxury-bg">
                 <ChefHat size={28} />
               </div>
               <div>
-                <h1 className="text-2xl font-black tracking-widest text-white uppercase">Kashmir</h1>
-                <p className="text-xs tracking-[0.2em] text-red-600 uppercase">Restaurant</p>
+                <h1 className="text-2xl font-black tracking-widest text-luxury-text uppercase">Kashmir</h1>
+                <p className="text-xs tracking-[0.2em] text-luxury-gold uppercase">Restaurant</p>
               </div>
             </Link>
 
             {/* Mobile Center: Logo */}
             <Link to="/" className="md:hidden flex flex-col items-center justify-center absolute left-1/2 -translate-x-1/2">
-              <h1 className="text-xl font-bold text-white font-serif tracking-wide">Kashmir</h1>
-              <div className="w-16 h-[2px] bg-red-600 mt-0.5"></div>
+              <h1 className="text-xl font-bold text-luxury-text font-serif tracking-wide">Kashmir</h1>
+              <div className="w-16 h-[2px] bg-luxury-gold mt-0.5"></div>
             </Link>
 
             {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-8 font-semibold text-sm tracking-widest uppercase">
-              <Link to="/" className="hover:text-red-600 transition">Menu</Link>
-              <Link to="/about" className="hover:text-red-600 transition">About Us</Link>
-              <Link to="/contact" className="hover:text-red-600 transition">Contact</Link>
+            <div className="hidden md:flex items-center gap-8 font-semibold text-sm tracking-widest uppercase text-luxury-text">
+              <Link to="/" className="hover:text-luxury-gold transition">Menu</Link>
+              <Link to="/about" className="hover:text-luxury-gold transition">About Us</Link>
+              <Link to="/contact" className="hover:text-luxury-gold transition">Contact</Link>
             </div>
 
             {/* Right Side: Auth + Cart */}
@@ -87,13 +89,13 @@ export default function Navbar() {
               
               {/* Active Order Tracker Widget (Desktop) */}
               {activeOrder && (
-                <div className="hidden md:flex items-center bg-red-600/10 border border-red-600/30 rounded-full px-4 py-2 gap-3 cursor-help">
-                  <Truck size={18} className="text-red-600 animate-bounce" />
+                <div className="hidden md:flex items-center bg-luxury-red/20 border border-luxury-red/50 rounded-full px-4 py-2 gap-3 cursor-help">
+                  <Truck size={18} className="text-luxury-gold animate-bounce" />
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-black text-red-600 uppercase tracking-widest leading-none mb-1">
+                    <span className="text-[9px] font-black text-luxury-gold uppercase tracking-widest leading-none mb-1">
                       {activeOrder.status}
                     </span>
-                    <span className="text-xs font-bold text-white leading-none tracking-wider">
+                    <span className="text-xs font-bold text-luxury-text leading-none tracking-wider">
                       {timeRemaining}
                     </span>
                   </div>
@@ -103,12 +105,12 @@ export default function Navbar() {
               {/* Auth Button/Icon */}
               {user ? (
                 <div className="relative group flex items-center">
-                  <button className="text-white hover:text-red-600 transition">
+                  <button className="text-luxury-text hover:text-luxury-gold transition">
                     <UserIcon size={22} className="md:w-5 md:h-5" />
                   </button>
                   {/* Dropdown for Desktop */}
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-[#111827] text-white rounded-lg shadow-xl border border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden hidden md:block">
-                    <button onClick={logout} className="w-full text-left px-4 py-3 text-xs tracking-widest font-bold hover:bg-gray-800 transition uppercase text-red-500">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-luxury-card text-luxury-text rounded-lg shadow-xl border border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden hidden md:block">
+                    <button onClick={logout} className="w-full text-left px-4 py-3 text-xs tracking-widest font-bold hover:bg-gray-800 transition uppercase text-luxury-red">
                       Sign Out
                     </button>
                   </div>
@@ -116,7 +118,7 @@ export default function Navbar() {
               ) : (
                 <button 
                   onClick={() => setIsAuthModalOpen(true)}
-                  className="text-white hover:text-red-600 transition"
+                  className="text-luxury-text hover:text-luxury-gold transition"
                 >
                   <UserIcon size={22} className="md:w-5 md:h-5" />
                 </button>
@@ -125,10 +127,10 @@ export default function Navbar() {
               {/* Cart Button */}
               <button 
                 onClick={() => setIsCartOpen(true)}
-                className="relative text-white hover:text-red-600 transition flex items-center justify-center p-1"
+                className="relative text-luxury-text hover:text-luxury-gold transition flex items-center justify-center p-1"
               >
                 <ShoppingCart size={22} className="md:w-6 md:h-6" />
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full font-bold">
+                <span className="absolute -top-1 -right-1 bg-luxury-red text-luxury-text text-[10px] w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full font-bold">
                   {cartCount}
                 </span>
               </button>
