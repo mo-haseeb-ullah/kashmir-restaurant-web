@@ -20,17 +20,17 @@ export default function Contact() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative h-[40vh] bg-[#111827] overflow-hidden flex items-center justify-center">
+      <div className="relative min-h-[50vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-24 pb-12">
         <img 
           src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1600&q=80" 
           alt="Contact Us" 
           className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay"
         />
         <div className="relative z-10 text-center px-4 max-w-3xl">
-          <h1 className="text-5xl font-black text-[#D4AF37] mb-4 uppercase tracking-widest font-serif">
+          <h1 className="text-5xl font-black text-luxury-gold mb-4 uppercase tracking-widest font-serif">
             Get in Touch
           </h1>
-          <div className="w-16 h-1 bg-[#991B1B] mx-auto"></div>
+          <div className="w-16 h-1 bg-luxury-red mx-auto"></div>
         </div>
       </div>
 
@@ -40,39 +40,39 @@ export default function Contact() {
           
           {/* Contact Details */}
           <div>
-            <h2 className="text-[#991B1B] text-sm font-bold tracking-[0.2em] uppercase mb-4">Visit Us</h2>
-            <h3 className="text-4xl font-black text-[#111827] font-serif mb-8">We are here for you</h3>
+            <h2 className="text-luxury-red text-sm font-bold tracking-[0.2em] uppercase mb-4">Visit Us</h2>
+            <h3 className="text-4xl font-black text-luxury-card font-serif mb-8">We are here for you</h3>
             <p className="text-gray-600 leading-relaxed mb-10">
               Whether you want to place a large catering order, ask about our menu, or simply drop by for the best Karahi in Khushab, we'd love to hear from you.
             </p>
 
             <div className="flex flex-col gap-8 mb-12">
               <div className="flex items-start gap-6">
-                <div className="bg-[#111827] text-[#D4AF37] p-4 rounded-xl shadow-md">
+                <div className="bg-luxury-card text-luxury-gold p-4 rounded-xl shadow-md">
                   <MapPin size={28} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-[#111827] mb-1 font-serif">Location</h4>
+                  <h4 className="text-xl font-bold text-luxury-card mb-1 font-serif">Location</h4>
                   <p className="text-gray-600">Chak 54MB, Khushab - Sakesar Road<br/>Khushab, Pakistan</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-6">
-                <div className="bg-[#111827] text-[#D4AF37] p-4 rounded-xl shadow-md">
+                <div className="bg-luxury-card text-luxury-gold p-4 rounded-xl shadow-md">
                   <Phone size={28} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-[#111827] mb-1 font-serif">Phone & WhatsApp</h4>
+                  <h4 className="text-xl font-bold text-luxury-card mb-1 font-serif">Phone & WhatsApp</h4>
                   <p className="text-gray-600">{WHATSAPP_NUMBER}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-6">
-                <div className="bg-[#111827] text-[#D4AF37] p-4 rounded-xl shadow-md">
+                <div className="bg-luxury-card text-luxury-gold p-4 rounded-xl shadow-md">
                   <Clock size={28} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold text-[#111827] mb-1 font-serif">Working Hours</h4>
+                  <h4 className="text-xl font-bold text-luxury-card mb-1 font-serif">Working Hours</h4>
                   <p className="text-gray-600">Monday - Sunday<br/>Open 24/7</p>
                 </div>
               </div>
