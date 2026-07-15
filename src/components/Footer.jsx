@@ -50,8 +50,7 @@ export default function Footer() {
           <div>
             <h4 className="text-luxury-gold text-sm font-bold tracking-[0.2em] uppercase mb-6">Connect</h4>
             <div className="flex gap-4 mb-8">
-              <a href="#" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg p-3 rounded-full transition font-bold text-sm">FB</a>
-              <a href="#" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg p-3 rounded-full transition font-bold text-sm">IG</a>
+              <a href="https://www.facebook.com/Kashmir.Restaurant.Official/" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg p-3 rounded-full transition font-bold text-sm">FB</a>
             </div>
             <a href={WHATSAPP_URL} className="bg-luxury-red hover:bg-luxury-red/80 text-white px-6 py-3 rounded-sm font-bold flex items-center justify-center gap-2 transition w-full uppercase tracking-widest text-sm">
               <MessageCircle size={18} />
