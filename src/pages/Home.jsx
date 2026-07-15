@@ -133,29 +133,31 @@ export default function Home() {
       </section>
 
       {/* Main Content - Menu */}
-      <main id="menu" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-grow bg-[#F5F5F0]">
-        <div className="text-center mb-12">
-          <h2 className="text-[#D4AF37] text-sm font-bold tracking-[0.3em] uppercase mb-2">Our Menu</h2>
-          <h3 className="text-4xl font-black text-[#111827] font-serif">Culinary Excellence</h3>
-          <div className="w-24 h-1 bg-[#991B1B] mx-auto mt-6 mb-10"></div>
+      <main id="menu" className="w-full bg-black flex-grow pb-20">
+        
+        {/* Header & Search */}
+        <div className="text-center pt-10 pb-6 px-4">
+          <h2 className="text-[#D4AF37] text-xs font-bold tracking-[0.3em] uppercase mb-1">Our Menu</h2>
+          <h3 className="text-3xl font-black text-white font-serif">Culinary Excellence</h3>
+          <div className="w-16 h-1 bg-red-600 mx-auto mt-4 mb-8"></div>
           
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto relative">
-            <SearchIcon size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <div className="max-w-2xl mx-auto relative px-2">
+            <SearchIcon size={20} className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input 
               type="text" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for Karahi, Biryani, Sweets..." 
-              className="w-full bg-white border-2 border-gray-100 rounded-full pl-12 pr-6 py-4 shadow-sm focus:outline-none focus:border-[#D4AF37] focus:ring-0 transition text-lg font-medium"
+              placeholder="Search dishes..." 
+              className="w-full bg-[#111827] text-white border border-gray-800 rounded-full pl-12 pr-6 py-3 focus:outline-none focus:border-red-600 transition text-sm font-medium placeholder-gray-500"
             />
           </div>
         </div>
 
         {/* Category Pills */}
-        <div className="relative max-w-full overflow-hidden mb-10">
+        <div className="w-full overflow-hidden mb-6">
           <div 
-            className="flex justify-start gap-3 overflow-x-auto pb-4 px-4 sm:px-6 snap-x"
+            className="flex justify-start gap-3 overflow-x-auto pb-4 px-4 snap-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             <style>{`.overflow-x-auto::-webkit-scrollbar { display: none; }`}</style>
@@ -163,10 +165,10 @@ export default function Home() {
             <button 
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`snap-start whitespace-nowrap px-6 py-3 rounded-full font-bold text-sm transition uppercase tracking-wide border-2 ${
+              className={`snap-start whitespace-nowrap px-5 py-2 rounded-full font-bold text-xs transition tracking-wide border ${
                 activeCategory === cat 
-                ? 'bg-[#111827] text-[#D4AF37] border-[#111827]' 
-                : 'bg-transparent text-[#111827] border-gray-300 hover:border-[#111827]'
+                ? 'bg-red-600 text-white border-red-600' 
+                : 'bg-[#111827] text-gray-300 border-gray-800 hover:border-gray-600'
               }`}
             >
               {cat}
@@ -176,43 +178,48 @@ export default function Home() {
         </div>
 
         {/* Menu Grid - Salt n Pepper Style */}
-        <div className="bg-black pt-6 pb-20">
-          <h2 className="text-white text-center font-serif text-2xl font-bold mb-8">Our Deals</h2>
+        <div className="w-full px-2">
+          <h2 className="text-white text-center font-serif text-xl font-bold mb-6">Our Deals</h2>
           
-          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2">
+          {/* We use Flexbox to guarantee 2 boxes per row on mobile to fix layout bugs */}
+          <div className="flex flex-wrap max-w-7xl mx-auto px-1">
             {filteredMenu.map(item => (
-              <div key={item.id} className="bg-black flex flex-col items-center group cursor-pointer pb-4">
+              <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 p-1.5">
+                <div className="bg-black flex flex-col items-center group cursor-pointer pb-3 h-full border border-gray-900 rounded-sm">
                 
                 {/* Image */}
-                <div className="w-full aspect-square overflow-hidden mb-3">
+                <div className="w-full aspect-square bg-[#111827] overflow-hidden mb-2 rounded-sm">
                   <img 
                     src={item.image} 
                     alt={item.name} 
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" 
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
                 
                 {/* Title */}
-                <h4 className="text-white text-[11px] md:text-sm font-bold text-center leading-tight mb-2 px-1 line-clamp-2">
+                <h4 className="text-white text-[10px] md:text-xs font-bold text-center leading-tight mb-1 px-1 line-clamp-2">
                   {item.name}
                 </h4>
                 
                 {/* Price */}
-                <div className="text-[#D4AF37] text-[10px] md:text-xs font-bold mb-3">
+                <div className="text-[#D4AF37] text-[10px] md:text-xs font-bold mb-2">
                   Rs {item.price}.00
                 </div>
                 
                 {/* Add Button */}
                 <button 
                   onClick={() => handleDirectAddToCart(item)}
-                  className="bg-red-600 hover:bg-red-700 text-white w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-[2px] transition-colors"
+                  className="bg-red-600 hover:bg-red-700 text-white w-6 h-6 flex items-center justify-center rounded-[2px] transition-colors"
                 >
-                  <Plus size={14} className="md:w-4 md:h-4" />
+                  <Plus size={14} />
                 </button>
+                </div>
               </div>
             ))}
           </div>
         </div>
+      </main>
 
         {/* Reviews Modal */}
         {reviewModalItem && (

@@ -10,6 +10,7 @@ export default function Navbar() {
   const { user, setIsAuthModalOpen, logout } = useAuth();
   const [activeOrder, setActiveOrder] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -44,92 +45,138 @@ export default function Navbar() {
   }, [user]);
 
   return (
-    <nav className="bg-black text-white sticky top-0 z-50 border-b border-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 md:h-20 relative">
-          
-          {/* Mobile Left: Hamburger */}
-          <button className="md:hidden text-white p-1">
-            <Menu size={24} />
-          </button>
-
-          {/* Desktop Left: Logo */}
-          <Link to="/" className="hidden md:flex items-center gap-3">
-            <div className="bg-[#D4AF37] p-2 rounded-full text-[#111827]">
-              <ChefHat size={28} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black tracking-widest text-white uppercase">Kashmir</h1>
-              <p className="text-xs tracking-[0.2em] text-red-600 uppercase">Restaurant</p>
-            </div>
-          </Link>
-
-          {/* Mobile Center: Logo */}
-          <Link to="/" className="md:hidden flex flex-col items-center justify-center absolute left-1/2 -translate-x-1/2">
-            <h1 className="text-xl font-bold text-white font-serif tracking-wide">Kashmir</h1>
-            <div className="w-16 h-[2px] bg-red-600 mt-0.5"></div>
-          </Link>
-
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-8 font-semibold text-sm tracking-widest uppercase">
-            <Link to="/" className="hover:text-red-600 transition">Menu</Link>
-            <Link to="/about" className="hover:text-red-600 transition">About Us</Link>
-            <Link to="/contact" className="hover:text-red-600 transition">Contact</Link>
-          </div>
-
-          {/* Right Side: Auth + Cart */}
-          <div className="flex items-center gap-3 md:gap-6">
+    <>
+      <nav className="bg-black text-white sticky top-0 z-50 border-b border-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 md:h-20 relative">
             
-            {/* Active Order Tracker Widget (Desktop) */}
-            {activeOrder && (
-              <div className="hidden md:flex items-center bg-red-600/10 border border-red-600/30 rounded-full px-4 py-2 gap-3 cursor-help">
-                <Truck size={18} className="text-red-600 animate-bounce" />
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-black text-red-600 uppercase tracking-widest leading-none mb-1">
-                    {activeOrder.status}
-                  </span>
-                  <span className="text-xs font-bold text-white leading-none tracking-wider">
-                    {timeRemaining}
-                  </span>
-                </div>
-              </div>
-            )}
+            {/* Mobile Left: Hamburger */}
+            <button 
+              className="md:hidden text-white p-1"
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
 
-            {/* Auth Button/Icon */}
-            {user ? (
-              <div className="relative group flex items-center">
-                <button className="text-white hover:text-red-600 transition">
+            {/* Desktop Left: Logo */}
+            <Link to="/" className="hidden md:flex items-center gap-3">
+              <div className="bg-[#D4AF37] p-2 rounded-full text-[#111827]">
+                <ChefHat size={28} />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black tracking-widest text-white uppercase">Kashmir</h1>
+                <p className="text-xs tracking-[0.2em] text-red-600 uppercase">Restaurant</p>
+              </div>
+            </Link>
+
+            {/* Mobile Center: Logo */}
+            <Link to="/" className="md:hidden flex flex-col items-center justify-center absolute left-1/2 -translate-x-1/2">
+              <h1 className="text-xl font-bold text-white font-serif tracking-wide">Kashmir</h1>
+              <div className="w-16 h-[2px] bg-red-600 mt-0.5"></div>
+            </Link>
+
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center gap-8 font-semibold text-sm tracking-widest uppercase">
+              <Link to="/" className="hover:text-red-600 transition">Menu</Link>
+              <Link to="/about" className="hover:text-red-600 transition">About Us</Link>
+              <Link to="/contact" className="hover:text-red-600 transition">Contact</Link>
+            </div>
+
+            {/* Right Side: Auth + Cart */}
+            <div className="flex items-center gap-3 md:gap-6">
+              
+              {/* Active Order Tracker Widget (Desktop) */}
+              {activeOrder && (
+                <div className="hidden md:flex items-center bg-red-600/10 border border-red-600/30 rounded-full px-4 py-2 gap-3 cursor-help">
+                  <Truck size={18} className="text-red-600 animate-bounce" />
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-red-600 uppercase tracking-widest leading-none mb-1">
+                      {activeOrder.status}
+                    </span>
+                    <span className="text-xs font-bold text-white leading-none tracking-wider">
+                      {timeRemaining}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Auth Button/Icon */}
+              {user ? (
+                <div className="relative group flex items-center">
+                  <button className="text-white hover:text-red-600 transition">
+                    <UserIcon size={22} className="md:w-5 md:h-5" />
+                  </button>
+                  {/* Dropdown for Desktop */}
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-[#111827] text-white rounded-lg shadow-xl border border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden hidden md:block">
+                    <button onClick={logout} className="w-full text-left px-4 py-3 text-xs tracking-widest font-bold hover:bg-gray-800 transition uppercase text-red-500">
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="text-white hover:text-red-600 transition"
+                >
                   <UserIcon size={22} className="md:w-5 md:h-5" />
                 </button>
-                {/* Dropdown for Desktop */}
-                <div className="absolute right-0 top-full mt-2 w-48 bg-[#111827] text-white rounded-lg shadow-xl border border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden hidden md:block">
-                  <button onClick={logout} className="w-full text-left px-4 py-3 text-xs tracking-widest font-bold hover:bg-gray-800 transition uppercase text-red-500">
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button 
-                onClick={() => setIsAuthModalOpen(true)}
-                className="text-white hover:text-red-600 transition"
-              >
-                <UserIcon size={22} className="md:w-5 md:h-5" />
-              </button>
-            )}
+              )}
 
-            {/* Cart Button */}
-            <button 
-              onClick={() => setIsCartOpen(true)}
-              className="relative text-white hover:text-red-600 transition flex items-center justify-center p-1"
-            >
-              <ShoppingCart size={22} className="md:w-6 md:h-6" />
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full font-bold">
-                {cartCount}
-              </span>
-            </button>
+              {/* Cart Button */}
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative text-white hover:text-red-600 transition flex items-center justify-center p-1"
+              >
+                <ShoppingCart size={22} className="md:w-6 md:h-6" />
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full font-bold">
+                  {cartCount}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* Mobile Menu Drawer */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[100] md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+          {/* Drawer */}
+          <div className="absolute top-0 left-0 bottom-0 w-3/4 max-w-sm bg-[#111827] border-r border-gray-900 shadow-2xl flex flex-col p-6 animate-slideInLeft">
+            <div className="flex items-center gap-3 mb-10 pb-6 border-b border-gray-800">
+              <div className="bg-[#D4AF37] p-2 rounded-full text-[#111827]">
+                <ChefHat size={24} />
+              </div>
+              <div>
+                <h1 className="text-xl font-black tracking-widest text-white uppercase leading-none">Kashmir</h1>
+                <p className="text-[10px] tracking-[0.2em] text-red-600 uppercase mt-1">Restaurant</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-6 text-sm font-bold tracking-widest uppercase">
+              <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="text-white hover:text-red-600 transition flex items-center gap-4">
+                Menu
+              </Link>
+              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="text-white hover:text-red-600 transition flex items-center gap-4">
+                About Us
+              </Link>
+              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-white hover:text-red-600 transition flex items-center gap-4">
+                Contact
+              </Link>
+              
+              {user && (
+                <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)} className="text-white hover:text-red-600 transition flex items-center gap-4 pt-6 border-t border-gray-800">
+                  Profile & Orders
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
