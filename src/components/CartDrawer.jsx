@@ -214,7 +214,7 @@ export default function CartDrawer() {
                           </div>
                         </div>
                         <button 
-                          onClick={() => addToCart({id: `addon-drink-${Date.now()}`, name: 'Cold Drink (1.5L)', price: '120', image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=100&q=80'})}
+                          onClick={() => addToCart({id: 'addon-drink-1.5L', name: 'Cold Drink (1.5L)', price: '120', image: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=100&q=80'})}
                           className="bg-white border-2 border-gray-200 text-[#111827] hover:border-[#D4AF37] hover:bg-[#D4AF37] px-4 py-2 rounded-lg text-xs font-bold transition uppercase tracking-widest"
                         >
                           Add
@@ -229,7 +229,7 @@ export default function CartDrawer() {
                           </div>
                         </div>
                         <button 
-                          onClick={() => addToCart({id: `addon-raita-${Date.now()}`, name: 'Fresh Zeera Raita', price: '70', image: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?w=100&q=80'})}
+                          onClick={() => addToCart({id: 'addon-raita', name: 'Fresh Zeera Raita', price: '70', image: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?w=100&q=80'})}
                           className="bg-white border-2 border-gray-200 text-[#111827] hover:border-[#D4AF37] hover:bg-[#D4AF37] px-4 py-2 rounded-lg text-xs font-bold transition uppercase tracking-widest"
                         >
                           Add

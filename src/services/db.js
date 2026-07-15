@@ -112,6 +112,13 @@ export const listenToOrders = (callback) => {
 
 // --- MENU API ---
 
+const KARAHI_VARIANTS = [
+  { label: 'Half (0.5 kg)', priceMultiplier: 0.5 },
+  { label: 'Full (1 kg)', priceMultiplier: 1 },
+  { label: '1.5 kg', priceMultiplier: 1.5 },
+  { label: '2 kg', priceMultiplier: 2 }
+];
+
 const defaultMenu = [
   // MEGA DEAL
   { id: 1, name: "Mega Deal", category: "🌟 Mega Deals", price: "5500", image: "https://images.unsplash.com/photo-1555126634-ae2306716a49?w=600&q=80", desc: "1kg Chicken Karahi, 1kg Chicken Biryani, Half kg Beef Karahi, 2 Chicken Kebabs, 2 Reshmi Kebabs, 2 Tikka Boti, 2 Malai Boti, Roti for 6, 6 Raita, 2 Salad, 2.25ltr Drink." },
@@ -131,27 +138,27 @@ const defaultMenu = [
   { id: 11, name: "Pakoray (پکوڑے)", category: "🍮 Kashmir Sweet Corner", price: "150", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80", desc: "Crispy besan fritters mixed with vegetables." },
 
   // OTHERS
-  { id: 12, name: "Cold Drink (کولڈ ڈرنک)", category: "🥤 Others", price: "70", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&q=80", desc: "Regular size chilled beverage." },
-  { id: 13, name: "Mineral Water (منرل واٹر)", category: "🥤 Others", price: "120", image: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=600&q=80", desc: "1.5 Liter purified water." },
+  { id: 12, name: "Cold Drink (کولڈ ڈرنک)", category: "🥤 Others", price: "70", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&q=80", desc: "Chilled beverage options.", variants: [{label: 'Regular', priceMultiplier: 1}, {label: 'Half Liter', priceMultiplier: 1.5}, {label: '1 Liter', priceMultiplier: 2.2}, {label: '1.5 Liter', priceMultiplier: 2.5}] },
+  { id: 13, name: "Mineral Water (منرل واٹر)", category: "🥤 Others", price: "70", image: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=600&q=80", desc: "Purified water.", variants: [{label: 'Regular', priceMultiplier: 1}, {label: '1.5 Liter', priceMultiplier: 1.7}] },
   { id: 14, name: "Russian Salad (رشین سلاد)", category: "🥤 Others", price: "650", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80", desc: "Creamy salad with fruits and vegetables." },
   { id: 15, name: "Salad (سلاد)", category: "🥤 Others", price: "70", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=80", desc: "Fresh seasonal vegetables." },
   { id: 16, name: "Raita (رائته)", category: "🥤 Others", price: "70", image: "https://images.unsplash.com/photo-1626201314643-d9d1502dc87e?w=600&q=80", desc: "Mint and cumin yogurt dip." },
 
   // KARAHI SPECIALS
-  { id: 17, name: "Desi Murgh Karahi (دیسی مرغ کڑاہی)", category: "🥘 Karahi Specials", price: "2200", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80", desc: "Authentic free-range chicken cooked in traditional spices." },
-  { id: 18, name: "Kashmir Special Chicken Karahi (کشمیر سپیشل چکن کڑاہی)", category: "🥘 Karahi Specials", price: "1800", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80", desc: "Our signature chicken karahi with a secret spice blend." },
-  { id: 19, name: "Chicken Karahi (چکن کڑاہی)", category: "🥘 Karahi Specials", price: "1500", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80", desc: "Classic chicken karahi in rich tomato gravy." },
-  { id: 20, name: "Chicken Namkeen Karahi (چکن نمکین کڑاہی)", category: "🥘 Karahi Specials", price: "1600", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80", desc: "Peshawari style salted chicken karahi." },
-  { id: 21, name: "Chicken White Karahi (چکن وائٹ کڑاہی)", category: "🥘 Karahi Specials", price: "1700", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80", desc: "Creamy and mild white chicken karahi." },
-  { id: 22, name: "Chicken Handi Boneless (چکن بون لیس ہانڈی)", category: "🥘 Karahi Specials", price: "1800", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80", desc: "Boneless chicken cooked in a traditional clay pot." },
-  { id: 23, name: "Chicken Achari Handi (چکن اچاری ہانڈی)", category: "🥘 Karahi Specials", price: "1900", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80", desc: "Boneless chicken in a tangy pickle-flavored gravy." },
-  { id: 24, name: "Chicken Achari Karahi (چکن اچاری کڑاہی)", category: "🥘 Karahi Specials", price: "1800", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80", desc: "Chicken karahi infused with traditional achaar spices." },
-  { id: 25, name: "Mutton Karahi (مٹن کڑاہی)", category: "🥘 Karahi Specials", price: "2800", image: "https://images.unsplash.com/photo-1544025162-8360d84c6e93?w=600&q=80", desc: "Tender mutton cooked in traditional desi ghee." },
-  { id: 26, name: "Mutton Namkeen Karahi (مٹن نمکین کڑاہی)", category: "🥘 Karahi Specials", price: "2900", image: "https://images.unsplash.com/photo-1601050690117-94f5f6af8bb4?w=600&q=80", desc: "Salted Peshawari style mutton karahi." },
-  { id: 27, name: "Mutton White Karahi (مٹن وائٹ کڑاہی)", category: "🥘 Karahi Specials", price: "3000", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80", desc: "Creamy and rich white mutton karahi." },
-  { id: 28, name: "Beef Karahi (بیف کڑاہی)", category: "🥘 Karahi Specials", price: "2000", image: "https://images.unsplash.com/photo-1544025162-8360d84c6e93?w=600&q=80", desc: "Spicy and tender beef karahi." },
-  { id: 29, name: "Beef Karahi Boneless (بیف کڑاہی بون لیس)", category: "🥘 Karahi Specials", price: "2200", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80", desc: "Boneless beef chunks in rich karahi masala." },
-  { id: 30, name: "Beef White Karahi Boneless (بیف وائٹ کڑاہی بون لیس)", category: "🥘 Karahi Specials", price: "2400", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80", desc: "Creamy boneless beef white karahi." },
+  { id: 17, name: "Desi Murgh Karahi (دیسی مرغ کڑاہی)", category: "🥘 Karahi Specials", price: "2200", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80", desc: "Authentic free-range chicken cooked in traditional spices.", variants: KARAHI_VARIANTS },
+  { id: 18, name: "Kashmir Special Chicken Karahi (کشمیر سپیشل چکن کڑاہی)", category: "🥘 Karahi Specials", price: "1800", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80", desc: "Our signature chicken karahi with a secret spice blend.", variants: KARAHI_VARIANTS },
+  { id: 19, name: "Chicken Karahi (چکن کڑاہی)", category: "🥘 Karahi Specials", price: "1500", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80", desc: "Classic chicken karahi in rich tomato gravy.", variants: KARAHI_VARIANTS },
+  { id: 20, name: "Chicken Namkeen Karahi (چکن نمکین کڑاہی)", category: "🥘 Karahi Specials", price: "1600", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80", desc: "Peshawari style salted chicken karahi.", variants: KARAHI_VARIANTS },
+  { id: 21, name: "Chicken White Karahi (چکن وائٹ کڑاہی)", category: "🥘 Karahi Specials", price: "1700", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80", desc: "Creamy and mild white chicken karahi.", variants: KARAHI_VARIANTS },
+  { id: 22, name: "Chicken Handi Boneless (چکن بون لیس ہانڈی)", category: "🥘 Karahi Specials", price: "1800", image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80", desc: "Boneless chicken cooked in a traditional clay pot.", variants: KARAHI_VARIANTS },
+  { id: 23, name: "Chicken Achari Handi (چکن اچاری ہانڈی)", category: "🥘 Karahi Specials", price: "1900", image: "https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80", desc: "Boneless chicken in a tangy pickle-flavored gravy.", variants: KARAHI_VARIANTS },
+  { id: 24, name: "Chicken Achari Karahi (چکن اچاری کڑاہی)", category: "🥘 Karahi Specials", price: "1800", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80", desc: "Chicken karahi infused with traditional achaar spices.", variants: KARAHI_VARIANTS },
+  { id: 25, name: "Mutton Karahi (مٹن کڑاہی)", category: "🥘 Karahi Specials", price: "2800", image: "https://images.unsplash.com/photo-1544025162-8360d84c6e93?w=600&q=80", desc: "Tender mutton cooked in traditional desi ghee.", variants: KARAHI_VARIANTS },
+  { id: 26, name: "Mutton Namkeen Karahi (مٹن نمکین کڑاہی)", category: "🥘 Karahi Specials", price: "2900", image: "https://images.unsplash.com/photo-1601050690117-94f5f6af8bb4?w=600&q=80", desc: "Salted Peshawari style mutton karahi.", variants: KARAHI_VARIANTS },
+  { id: 27, name: "Mutton White Karahi (مٹن وائٹ کڑاہی)", category: "🥘 Karahi Specials", price: "3000", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80", desc: "Creamy and rich white mutton karahi.", variants: KARAHI_VARIANTS },
+  { id: 28, name: "Beef Karahi (بیف کڑاہی)", category: "🥘 Karahi Specials", price: "2000", image: "https://images.unsplash.com/photo-1544025162-8360d84c6e93?w=600&q=80", desc: "Spicy and tender beef karahi.", variants: KARAHI_VARIANTS },
+  { id: 29, name: "Beef Karahi Boneless (بیف کڑاہی بون لیس)", category: "🥘 Karahi Specials", price: "2200", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80", desc: "Boneless beef chunks in rich karahi masala.", variants: KARAHI_VARIANTS },
+  { id: 30, name: "Beef White Karahi Boneless (بیف وائٹ کڑاہی بون لیس)", category: "🥘 Karahi Specials", price: "2400", image: "https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80", desc: "Creamy boneless beef white karahi.", variants: KARAHI_VARIANTS },
 ];
 
 const getMenu = () => {

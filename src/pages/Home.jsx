@@ -11,10 +11,13 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [menuItems, setMenuItems] = useState([]);
   
-  // Review Modal State
   const [reviewModalItem, setReviewModalItem] = useState(null);
   const [reviewText, setReviewText] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
+  // Variant Modal State
+  const [variantModalItem, setVariantModalItem] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
   useEffect(() => {
     const unsubscribe = listenToMenu((data) => {
@@ -33,12 +36,35 @@ export default function Home() {
   });
 
   const handleDirectAddToCart = (item) => {
+    if (item.variants && item.variants.length > 0) {
+      setVariantModalItem(item);
+      setSelectedVariant(item.variants[0]);
+      return;
+    }
+    
     addToCart({
       ...item,
-      id: `${item.id}-${Date.now()}`,
+      cartItemId: item.id.toString(), // Base item ID for grouping
       quantity: 1
     });
-    setIsCartOpen(true);
+  };
+
+  const handleAddVariantToCart = () => {
+    if (!variantModalItem || !selectedVariant) return;
+    
+    // Calculate final price based on multiplier
+    const finalPrice = Math.round(parseInt(variantModalItem.price) * selectedVariant.priceMultiplier);
+    
+    addToCart({
+      ...variantModalItem,
+      id: `${variantModalItem.id}-${selectedVariant.label}`, // Unique ID for this specific variant
+      name: `${variantModalItem.name} (${selectedVariant.label})`,
+      price: finalPrice.toString(),
+      quantity: 1
+    });
+    
+    setVariantModalItem(null);
+    setSelectedVariant(null);
   };
 
   const handleSubmitReview = () => {
@@ -57,21 +83,21 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative h-[60vh] bg-[#111827] overflow-hidden flex items-center justify-center">
+      <div className="relative min-h-[70vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-24 pb-12">
         <img 
           src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=80" 
           alt="Premium Dining" 
-          className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay"
+          className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
         />
-        <div className="relative z-10 text-center px-4 max-w-3xl">
-          <h2 className="text-[#D4AF37] text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
-          <h1 className="text-5xl sm:text-7xl font-black text-white mb-6 leading-tight font-serif">
-            Authentic <span className="text-[#991B1B]">Desi</span> Cuisine
+        <div className="relative z-10 text-center px-4 max-w-4xl mt-12 md:mt-0">
+          <h2 className="text-luxury-gold text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
+          <h1 className="text-5xl sm:text-7xl font-black text-luxury-text mb-6 leading-tight font-serif" dir="rtl">
+            مستند <span className="text-luxury-red">دیسی</span> پکوان
           </h1>
-          <p className="text-gray-300 text-lg sm:text-xl mb-10 font-light">
-            Serving Khushab's finest Karahi, Handi, and Breakfast dishes since the beginning.
+          <p className="text-gray-300 text-lg sm:text-2xl mb-10 font-light" dir="rtl">
+            خوشاب کی بہترین کڑاہی، ہانڈی، اور ناشتے کے پکوان کی شاندار پیشکش۔
           </p>
-          <a href="#menu" className="bg-[#991B1B] hover:bg-[#7a1515] text-white px-8 py-4 rounded-sm font-bold text-lg inline-flex items-center gap-3 transition shadow-2xl uppercase tracking-widest">
+          <a href="#menu" className="bg-luxury-red hover:bg-luxury-red/80 text-luxury-text px-8 py-4 rounded-sm font-bold text-lg inline-flex items-center gap-3 transition shadow-2xl uppercase tracking-widest">
             <Utensils size={20} />
             View Full Menu
           </a>
@@ -184,35 +210,37 @@ export default function Home() {
           {/* We use Flexbox to guarantee 2 boxes per row on mobile to fix layout bugs */}
           <div className="flex flex-wrap max-w-7xl mx-auto px-1">
             {filteredMenu.map(item => (
-              <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 p-1.5">
-                <div className="bg-luxury-card flex flex-col items-center group cursor-pointer pb-3 h-full border border-black/40 shadow-sm rounded-sm">
+              <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 p-2">
+                <div className="bg-luxury-card flex flex-col items-center group cursor-pointer pb-4 h-full border border-gray-800 hover:border-luxury-gold/40 shadow-xl hover:shadow-luxury-gold/5 rounded-2xl transition-all duration-300 relative overflow-hidden">
                 
                 {/* Image */}
-                <div className="w-full aspect-square bg-luxury-bg overflow-hidden mb-2 rounded-sm">
+                <div className="w-full aspect-square bg-luxury-bg overflow-hidden mb-3 relative">
                   <img 
                     src={item.image} 
                     alt={item.name} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out" 
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
+                  {/* Subtle Gradient Overlay for premium feel */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-luxury-card/90 via-transparent to-transparent opacity-80"></div>
                 </div>
                 
                 {/* Title */}
-                <h4 className="text-luxury-text text-[10px] md:text-xs font-bold text-center leading-tight mb-1 px-1 line-clamp-2">
+                <h4 className="text-luxury-text text-xs md:text-sm font-bold text-center leading-tight mb-1 px-3 line-clamp-2 z-10">
                   {item.name}
                 </h4>
                 
                 {/* Price */}
-                <div className="text-luxury-gold text-[10px] md:text-xs font-bold mb-2">
+                <div className="text-luxury-gold text-xs md:text-sm font-bold mb-3 z-10">
                   Rs {item.price}.00
                 </div>
                 
                 {/* Add Button */}
                 <button 
                   onClick={() => handleDirectAddToCart(item)}
-                  className="bg-luxury-red hover:bg-luxury-red/90 text-luxury-text w-6 h-6 flex items-center justify-center rounded-[2px] transition-colors"
+                  className="bg-luxury-red hover:bg-luxury-red/80 text-luxury-text px-5 py-1.5 flex items-center justify-center rounded-full transition-colors text-[10px] font-bold uppercase tracking-widest shadow-md z-10"
                 >
-                  <Plus size={14} />
+                  Add <Plus size={12} className="ml-1" />
                 </button>
                 </div>
               </div>
@@ -249,10 +277,10 @@ export default function Home() {
                   </div>
                   <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
                     <div className="flex justify-between items-start mb-2">
-                      <p className="font-bold text-sm text-[#111827]">Sarah Ahmed</p>
-                      <div className="flex text-[#D4AF37]"><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/></div>
+                      <p className="font-bold text-sm text-[#111827]">Fatima S.</p>
+                      <div className="flex text-[#D4AF37]"><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} fill="currentColor"/><Star size={12} className="text-gray-200" fill="currentColor"/></div>
                     </div>
-                    <p className="text-sm text-gray-500">Very good portion size and packaging was neat. Will definitely order again.</p>
+                    <p className="text-sm text-gray-500">Good portion sizes and well packaged. Arrived piping hot.</p>
                   </div>
                 </div>
               </div>
@@ -283,6 +311,59 @@ export default function Home() {
                   </>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+        {/* Variant Selection Modal */}
+        {variantModalItem && (
+          <div className="fixed inset-0 bg-black/80 z-[100] backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-[fadeIn_0.2s_ease-out]">
+            <div className="bg-luxury-bg w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden relative border-t sm:border border-gray-800 flex flex-col animate-[slideUp_0.3s_ease-out]">
+              
+              <div className="p-6 border-b border-gray-800 bg-luxury-card text-luxury-text flex justify-between items-center shrink-0">
+                <div>
+                  <h3 className="text-xl font-black font-serif tracking-widest text-luxury-gold uppercase line-clamp-1 pr-4">
+                    {variantModalItem.name}
+                  </h3>
+                  <p className="text-sm text-luxury-muted mt-1">Select your preferred option</p>
+                </div>
+                <button onClick={() => setVariantModalItem(null)} className="bg-gray-800 hover:bg-luxury-red text-luxury-text transition p-2 rounded-full flex-shrink-0">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="p-6 flex-grow overflow-y-auto">
+                <div className="space-y-3">
+                  {variantModalItem.variants.map((variant, idx) => {
+                    const variantPrice = Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
+                    const isSelected = selectedVariant?.label === variant.label;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => setSelectedVariant(variant)}
+                        className={`w-full flex justify-between items-center p-4 rounded-xl border-2 transition-all duration-200 ${
+                          isSelected 
+                            ? 'bg-luxury-card border-luxury-gold shadow-lg shadow-luxury-gold/5 transform scale-[1.02]' 
+                            : 'bg-transparent border-gray-800 hover:border-gray-600 hover:bg-luxury-card text-luxury-muted'
+                        }`}
+                      >
+                        <span className={`font-bold ${isSelected ? 'text-luxury-text' : ''}`}>{variant.label}</span>
+                        <span className={`font-black ${isSelected ? 'text-luxury-gold' : 'text-gray-500'}`}>Rs {variantPrice}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="p-6 bg-luxury-card border-t border-gray-800">
+                <button 
+                  onClick={handleAddVariantToCart}
+                  className="w-full bg-luxury-red hover:bg-luxury-red/80 text-luxury-text py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-xl flex justify-center items-center gap-2"
+                >
+                  <ShoppingCart size={18} />
+                  Add to Cart
+                </button>
+              </div>
+
             </div>
           </div>
         )}
