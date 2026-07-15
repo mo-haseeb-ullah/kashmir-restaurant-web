@@ -219,7 +219,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </main>
 
         {/* Reviews Modal */}
         {reviewModalItem && (
