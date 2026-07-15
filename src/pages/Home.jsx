@@ -178,40 +178,49 @@ export default function Home() {
         {/* Menu Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredMenu.map(item => (
-            <div key={item.id} className="bg-white rounded-sm shadow-xl shadow-gray-200/50 overflow-hidden group border border-gray-100 flex flex-col">
-              <div className="h-64 overflow-hidden relative">
+            <div key={item.id} className="bg-white rounded-sm shadow-xl shadow-gray-200/50 overflow-hidden group border border-gray-100 flex flex-row md:flex-col h-[140px] md:h-auto">
+              {/* Image Container */}
+              <div className="w-1/3 md:w-full h-full md:h-64 flex-shrink-0 overflow-hidden relative">
                 <img 
                   src={item.image} 
                   alt={item.name} 
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" 
                 />
-                <div className="absolute top-4 right-4 bg-[#111827] text-[#D4AF37] px-4 py-1.5 font-bold tracking-widest text-sm rounded-sm">
+                <div className="hidden md:block absolute top-4 right-4 bg-[#111827] text-[#D4AF37] px-4 py-1.5 font-bold tracking-widest text-sm rounded-sm">
                   Rs. {item.price}
                 </div>
               </div>
               
-              <div className="p-6 flex flex-col flex-grow">
-                <p className="text-[#991B1B] text-xs font-bold tracking-[0.2em] uppercase mb-2">{item.category}</p>
-                <h4 className="font-bold text-2xl text-[#111827] mb-2 font-serif">{item.name}</h4>
+              {/* Content Container */}
+              <div className="p-3 md:p-6 flex flex-col flex-grow w-2/3 md:w-full">
+                <div className="flex justify-between items-start mb-1 md:mb-2">
+                  <p className="text-[#991B1B] text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase truncate pr-2">{item.category}</p>
+                  <span className="md:hidden text-[#111827] font-bold text-[11px] bg-gray-100 px-1.5 py-0.5 rounded-sm whitespace-nowrap">Rs. {item.price}</span>
+                </div>
+                
+                <h4 className="font-bold text-sm md:text-2xl text-[#111827] mb-1 md:mb-2 font-serif line-clamp-1 md:line-clamp-none">{item.name}</h4>
                 
                 {/* Ratings */}
                 <div 
-                  className="flex items-center gap-1 text-[#D4AF37] mb-3 cursor-pointer hover:opacity-80 transition"
+                  className="flex items-center gap-1 text-[#D4AF37] mb-1 md:mb-3 cursor-pointer hover:opacity-80 transition"
                   onClick={() => setReviewModalItem(item)}
                 >
-                  <Star size={16} fill="currentColor" />
-                  <span className="text-sm font-bold text-[#111827]">{(4.0 + (item.id % 10) / 10).toFixed(1)}</span>
-                  <span className="text-xs text-gray-400 font-medium ml-1 underline decoration-dashed">({(item.id * 13 + 42)} Reviews)</span>
+                  <Star size={12} fill="currentColor" className="md:hidden" />
+                  <Star size={16} fill="currentColor" className="hidden md:block" />
+                  <span className="text-xs md:text-sm font-bold text-[#111827]">{(4.0 + (item.id % 10) / 10).toFixed(1)}</span>
+                  <span className="text-[10px] md:text-xs text-gray-400 font-medium ml-1 underline decoration-dashed whitespace-nowrap">({(item.id * 13 + 42)} Revs)</span>
                 </div>
 
-                <p className="text-gray-500 text-sm mb-6 flex-grow">{item.desc}</p>
+                <p className="text-gray-500 text-[11px] md:text-sm mb-2 md:mb-6 flex-grow line-clamp-2 md:line-clamp-none leading-snug">{item.desc}</p>
                 
                 <button 
                   onClick={() => handleDirectAddToCart(item)}
-                  className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white py-3 font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-colors rounded-sm"
+                  className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white py-1.5 md:py-3 font-bold uppercase tracking-widest text-[10px] md:text-sm flex items-center justify-center gap-1 md:gap-2 transition-colors rounded-sm mt-auto"
                 >
-                  <ShoppingCart size={18} />
-                  Add to Cart
+                  <ShoppingCart size={14} className="md:hidden" />
+                  <ShoppingCart size={18} className="hidden md:block" />
+                  <span className="hidden md:inline">Add to Cart</span>
+                  <span className="md:hidden">Add</span>
                 </button>
               </div>
             </div>
