@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDocs, where } from 'firebase/firestore';
+import { collection, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDocs, where, runTransaction } from 'firebase/firestore';
 
 // --- AUTH API ---
 
@@ -42,8 +42,28 @@ export const loginUser = async (phone, password) => {
 // --- ORDERS API ---
 
 export const addOrder = async (orderData) => {
+  const counterRef = doc(db, 'metadata', 'orderCounter');
+  let newOrderNumber = 1;
+  
+  try {
+    await runTransaction(db, async (transaction) => {
+      const counterDoc = await transaction.get(counterRef);
+      if (!counterDoc.exists()) {
+        transaction.set(counterRef, { count: 1 });
+        newOrderNumber = 1;
+      } else {
+        newOrderNumber = counterDoc.data().count + 1;
+        transaction.update(counterRef, { count: newOrderNumber });
+      }
+    });
+  } catch(e) {
+    console.error("Counter transaction failed", e);
+    newOrderNumber = Math.floor(Math.random() * 1000000);
+  }
+
   const newOrder = {
     ...orderData,
+    orderId: newOrderNumber,
     timestamp: new Date().toISOString(),
     status: 'New',
     estimatedDeliveryTime: new Date(Date.now() + 45 * 60000).toISOString()

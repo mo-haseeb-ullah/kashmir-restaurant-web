@@ -285,7 +285,7 @@ export default function Admin() {
                           <div className="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50">
                             <div>
                               <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Order ID</span>
-                              <h4 className="font-bold text-[#111827] font-serif">{order.id}</h4>
+                              <h4 className="font-bold text-[#111827] font-serif">#{order.orderId || order.id}</h4>
                             </div>
                             <div className="text-right">
                               <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${getStatusColor(order.status)}`}>{order.status}</span>

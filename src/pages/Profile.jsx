@@ -86,7 +86,7 @@ export default function Profile() {
                     <span className="text-sm font-bold text-gray-400">
                       {new Date(order.timestamp).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
-                    <span className="text-xs font-bold text-gray-300">ID: {order.id}</span>
+                    <span className="text-xs font-bold text-gray-300">ID: #{order.orderId || order.id}</span>
                   </div>
                   
                   <div className="space-y-2">
