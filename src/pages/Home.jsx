@@ -254,8 +254,7 @@ export default function Home() {
             {filteredMenu.map(item => (
               <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 p-2">
                 <div 
-                  className="bg-white group cursor-pointer h-full border border-gray-200 shadow-sm rounded-xl transition-all relative overflow-hidden flex flex-col"
-                  onClick={() => handleDirectAddToCart(item)}
+                  className="bg-white group h-full border border-gray-200 shadow-sm rounded-xl transition-all relative overflow-hidden flex flex-col"
                 >
                   {/* Image */}
                   <div className="w-full aspect-[4/3] bg-gray-100 overflow-hidden relative">
