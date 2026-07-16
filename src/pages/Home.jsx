@@ -5,6 +5,14 @@ import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
 import { listenToMenu } from '../services/db';
 
+const STANDARD_ADDONS = [
+  { id: 'add-1', name: 'Khameeri Roti', price: 65, image: 'https://images.unsplash.com/photo-1626082895617-2c6afda2c046?w=100&q=80' },
+  { id: 'add-2', name: 'Roghni Naan', price: 95, image: 'https://images.unsplash.com/photo-1626082895617-2c6afda2c046?w=100&q=80' },
+  { id: 'add-3', name: 'Sada Naan', price: 65, image: 'https://images.unsplash.com/photo-1626082895617-2c6afda2c046?w=100&q=80' },
+  { id: 'add-4', name: 'Pudina Raita', price: 175, image: 'https://images.unsplash.com/photo-1626201314643-d9d1502dc87e?w=100&q=80' },
+  { id: 'add-5', name: 'Fresh Salad', price: 275, image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=100&q=80' },
+];
+
 export default function Home() {
   const { addToCart, setIsCartOpen } = useCart();
   const [activeCategory, setActiveCategory] = useState('All');
@@ -24,6 +32,8 @@ export default function Home() {
   // Variant Modal State
   const [variantModalItem, setVariantModalItem] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedAddons, setSelectedAddons] = useState([]);
+  const [variantQuantity, setVariantQuantity] = useState(1);
 
   useEffect(() => {
     const unsubscribe = listenToMenu((data) => {
@@ -44,7 +54,9 @@ export default function Home() {
   const handleDirectAddToCart = (item) => {
     if (item.variants && item.variants.length > 0) {
       setVariantModalItem(item);
-      setSelectedVariant(item.variants[0]);
+      setSelectedVariant(item.variants[0]); // Default to first variant
+      setSelectedAddons([]); // Clear previous addons
+      setVariantQuantity(1); // Reset quantity
       return;
     }
     
@@ -62,17 +74,32 @@ export default function Home() {
     // Calculate final price based on multiplier
     const finalPrice = Math.round(parseInt(variantModalItem.price) * selectedVariant.priceMultiplier);
     
+    // Add main item
     addToCart({
       ...variantModalItem,
-      id: `${variantModalItem.id}-${selectedVariant.label}`, // Unique ID for this specific variant
+      id: `${variantModalItem.id}-${selectedVariant.label}`, 
       name: `${variantModalItem.name} (${selectedVariant.label})`,
       price: finalPrice.toString(),
-      quantity: 1
+      quantity: variantQuantity
+    });
+
+    // Add selected addons
+    selectedAddons.forEach(addon => {
+      addToCart({
+        id: addon.id,
+        name: addon.name,
+        price: addon.price.toString(),
+        quantity: variantQuantity,
+        cartItemId: addon.id,
+        image: addon.image
+      });
     });
     
     setVariantModalItem(null);
     setSelectedVariant(null);
-    showToast(`Added ${variantModalItem.name} (${selectedVariant.label}) to cart!`);
+    setSelectedAddons([]);
+    setVariantQuantity(1);
+    showToast(`Added ${variantModalItem.name} to cart!`);
   };
 
   const handleSubmitReview = () => {
@@ -226,37 +253,37 @@ export default function Home() {
           <div className="flex flex-wrap max-w-7xl mx-auto px-1">
             {filteredMenu.map(item => (
               <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 p-2">
-                <div className="bg-luxury-card flex flex-col items-center group cursor-pointer pb-4 h-full border border-gray-800 hover:border-luxury-gold/40 shadow-xl hover:shadow-luxury-gold/5 rounded-2xl transition-all duration-300 relative overflow-hidden">
-                
-                {/* Image */}
-                <div className="w-full aspect-square bg-luxury-bg overflow-hidden mb-3 relative">
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out" 
-                    onError={(e) => { e.target.style.display = 'none'; }}
-                  />
-                  {/* Subtle Gradient Overlay for premium feel */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-luxury-card/90 via-transparent to-transparent opacity-80"></div>
-                </div>
-                
-                {/* Title */}
-                <h4 className="text-luxury-text text-xs md:text-sm font-bold text-center leading-tight mb-1 px-3 line-clamp-2 z-10">
-                  {item.name}
-                </h4>
-                
-                {/* Price */}
-                <div className="text-luxury-gold text-xs md:text-sm font-bold mb-3 z-10">
-                  Rs {item.price}.00
-                </div>
-                
-                {/* Add Button */}
-                <button 
+                <div 
+                  className="bg-white group cursor-pointer h-full border border-gray-200 shadow-sm rounded-xl transition-all relative overflow-hidden flex flex-col"
                   onClick={() => handleDirectAddToCart(item)}
-                  className="bg-luxury-red hover:bg-luxury-red/80 text-luxury-text px-5 py-1.5 flex items-center justify-center rounded-full transition-colors text-[10px] font-bold uppercase tracking-widest shadow-md z-10"
                 >
-                  Add <Plus size={12} className="ml-1" />
-                </button>
+                  {/* Image */}
+                  <div className="w-full aspect-[4/3] bg-gray-100 overflow-hidden relative">
+                    <img 
+                      src={item.image} 
+                      alt={item.name} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" 
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                  
+                  {/* Content below image */}
+                  <div className="p-3 pb-4 flex flex-col flex-grow text-left relative">
+                    <h4 className="text-[#111827] text-sm md:text-base font-bold leading-tight mb-1 line-clamp-2">
+                      {item.name}
+                    </h4>
+                    <div className="text-gray-600 text-xs md:text-sm font-medium mb-1">
+                      from Rs. {item.price}
+                    </div>
+                  </div>
+                  
+                  {/* Circular Add Button */}
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); handleDirectAddToCart(item); }}
+                    className="absolute bottom-3 right-3 bg-white border border-gray-200 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:bg-gray-50 transition text-[#111827]"
+                  >
+                    <Plus size={16} strokeWidth={2.5} />
+                  </button>
                 </div>
               </div>
             ))}
@@ -331,51 +358,136 @@ export default function Home() {
         )}
         {/* Variant Selection Modal */}
         {variantModalItem && (
-          <div className="fixed inset-0 bg-black/80 z-[100] backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-[fadeIn_0.2s_ease-out]">
-            <div className="bg-luxury-bg w-full sm:max-w-md sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden relative border-t sm:border border-gray-800 flex flex-col animate-[slideUp_0.3s_ease-out]">
+          <div className="fixed inset-0 bg-black/60 z-[100] flex items-end sm:items-center justify-center sm:p-4 animate-[fadeIn_0.2s_ease-out]">
+            <div className="bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden relative flex flex-col h-[90vh] sm:h-auto sm:max-h-[90vh] animate-[slideUp_0.3s_ease-out]">
               
-              <div className="p-6 border-b border-gray-800 bg-luxury-card text-luxury-text flex justify-between items-center shrink-0">
-                <div>
-                  <h3 className="text-xl font-black font-serif tracking-widest text-luxury-gold uppercase line-clamp-1 pr-4">
-                    {variantModalItem.name}
-                  </h3>
-                  <p className="text-sm text-luxury-muted mt-1">Select your preferred option</p>
-                </div>
-                <button onClick={() => setVariantModalItem(null)} className="bg-gray-800 hover:bg-luxury-red text-luxury-text transition p-2 rounded-full flex-shrink-0">
+              {/* Image & Close Button */}
+              <div className="relative h-56 shrink-0 bg-gray-100">
+                <img 
+                  src={variantModalItem.image} 
+                  alt={variantModalItem.name} 
+                  className="w-full h-full object-cover" 
+                />
+                <button 
+                  onClick={() => setVariantModalItem(null)} 
+                  className="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-800 p-2 rounded-full shadow-sm hover:bg-gray-100 transition"
+                >
                   <X size={20} />
                 </button>
               </div>
 
-              <div className="p-6 flex-grow overflow-y-auto">
-                <div className="space-y-3">
-                  {variantModalItem.variants.map((variant, idx) => {
-                    const variantPrice = Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
-                    const isSelected = selectedVariant?.label === variant.label;
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedVariant(variant)}
-                        className={`w-full flex justify-between items-center p-4 rounded-xl border-2 transition-all duration-200 ${
-                          isSelected 
-                            ? 'bg-luxury-card border-luxury-gold shadow-lg shadow-luxury-gold/5 transform scale-[1.02]' 
-                            : 'bg-transparent border-gray-800 hover:border-gray-600 hover:bg-luxury-card text-luxury-muted'
-                        }`}
-                      >
-                        <span className={`font-bold ${isSelected ? 'text-luxury-text' : ''}`}>{variant.label}</span>
-                        <span className={`font-black ${isSelected ? 'text-luxury-gold' : 'text-gray-500'}`}>Rs {variantPrice}</span>
-                      </button>
-                    );
-                  })}
+              <div className="flex-grow overflow-y-auto bg-gray-50 pb-24">
+                
+                {/* Title & Desc */}
+                <div className="bg-white p-5 mb-2">
+                  <h3 className="text-2xl font-black text-[#111827] mb-1">
+                    {variantModalItem.name}
+                  </h3>
+                  <p className="text-[#111827] font-bold text-sm mb-2">
+                    from Rs. {variantModalItem.price}.00
+                  </p>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    {variantModalItem.desc}
+                  </p>
                 </div>
+
+                {/* Variations */}
+                <div className="bg-white mb-2">
+                  <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                    <div>
+                      <h4 className="font-bold text-[#111827] text-lg">Variation</h4>
+                      <p className="text-xs text-gray-500">Select 1</p>
+                    </div>
+                    <span className="bg-[#111827] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Required</span>
+                  </div>
+                  <div className="px-4">
+                    {variantModalItem.variants.map((variant, idx) => {
+                      const variantPrice = Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
+                      const isSelected = selectedVariant?.label === variant.label;
+                      return (
+                        <div 
+                          key={idx} 
+                          onClick={() => setSelectedVariant(variant)}
+                          className="flex justify-between items-center py-4 border-b border-gray-100 last:border-0 cursor-pointer"
+                        >
+                          <span className="font-bold text-gray-700">{variant.label}</span>
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm text-gray-600">Rs. {variantPrice}.00</span>
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-[#D4AF37]' : 'border-gray-300'}`}>
+                              {isSelected && <div className="w-3 h-3 bg-[#D4AF37] rounded-full"></div>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Frequently Bought Together */}
+                <div className="bg-white">
+                  <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                    <div>
+                      <h4 className="font-bold text-[#111827] text-lg">Frequently bought together</h4>
+                      <p className="text-xs text-gray-500">Other customers also ordered these</p>
+                    </div>
+                    <span className="bg-gray-200 text-gray-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Optional</span>
+                  </div>
+                  <div className="px-4">
+                    {STANDARD_ADDONS.map((addon) => {
+                      const isSelected = selectedAddons.find(a => a.id === addon.id);
+                      return (
+                        <div 
+                          key={addon.id} 
+                          onClick={() => {
+                            if (isSelected) {
+                              setSelectedAddons(prev => prev.filter(a => a.id !== addon.id));
+                            } else {
+                              setSelectedAddons(prev => [...prev, addon]);
+                            }
+                          }}
+                          className="flex items-center py-4 border-b border-gray-100 last:border-0 cursor-pointer"
+                        >
+                          <img src={addon.image} alt={addon.name} className="w-12 h-12 object-cover rounded-lg border border-gray-200 shrink-0" />
+                          <span className="font-bold text-gray-700 ml-3 flex-grow">{addon.name}</span>
+                          <div className="flex items-center gap-3 shrink-0">
+                            <span className="text-sm text-gray-600">+Rs. {addon.price}.00</span>
+                            <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${isSelected ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-300'}`}>
+                              {isSelected && <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
               </div>
 
-              <div className="p-6 bg-luxury-card border-t border-gray-800">
+              {/* Sticky Bottom Bar */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex items-center gap-4 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+                {/* Quantity Selector */}
+                <div className="flex items-center gap-4 px-2">
+                  <button 
+                    onClick={() => setVariantQuantity(Math.max(1, variantQuantity - 1))}
+                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition"
+                  >
+                    -
+                  </button>
+                  <span className="font-bold text-lg">{variantQuantity}</span>
+                  <button 
+                    onClick={() => setVariantQuantity(variantQuantity + 1)}
+                    className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition"
+                  >
+                    +
+                  </button>
+                </div>
+                
+                {/* Add to Cart Button */}
                 <button 
                   onClick={handleAddVariantToCart}
-                  className="w-full bg-luxury-red hover:bg-luxury-red/80 text-luxury-text py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-xl flex justify-center items-center gap-2"
+                  className="flex-1 bg-[#D4AF37] hover:bg-[#c5a02e] text-[#111827] py-3.5 rounded-xl font-bold transition shadow-md flex justify-center items-center"
                 >
-                  <ShoppingCart size={18} />
-                  Add to Cart
+                  Add to cart
                 </button>
               </div>
 
