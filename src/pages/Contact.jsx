@@ -16,11 +16,11 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col pt-20">
+    <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative h-[40vh] bg-luxury-bg overflow-hidden flex items-center justify-center">
+      <div className="relative min-h-[40vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-20 pb-8">
         <img 
           src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1600&q=80" 
           alt="Contact Us" 
