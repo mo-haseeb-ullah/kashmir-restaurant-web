@@ -14,8 +14,6 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...item, quantity: 1 }];
     });
-    // Auto-open cart when adding an item for premium feel
-    setIsCartOpen(true);
   };
 
   const updateQuantity = (id, delta) => {
