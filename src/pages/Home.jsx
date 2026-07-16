@@ -14,6 +14,12 @@ export default function Home() {
   const [reviewModalItem, setReviewModalItem] = useState(null);
   const [reviewText, setReviewText] = useState('');
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Variant Modal State
   const [variantModalItem, setVariantModalItem] = useState(null);
@@ -47,6 +53,7 @@ export default function Home() {
       cartItemId: item.id.toString(), // Base item ID for grouping
       quantity: 1
     });
+    showToast(`Added ${item.name} to cart!`);
   };
 
   const handleAddVariantToCart = () => {
@@ -65,6 +72,7 @@ export default function Home() {
     
     setVariantModalItem(null);
     setSelectedVariant(null);
+    showToast(`Added ${variantModalItem.name} (${selectedVariant.label}) to cart!`);
   };
 
   const handleSubmitReview = () => {
@@ -81,6 +89,13 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
       <Navbar />
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-[#D4AF37] text-[#111827] px-6 py-3 rounded-full font-bold shadow-xl z-50 animate-bounce">
+          {toastMessage}
+        </div>
+      )}
 
       {/* Hero Section */}
       <div className="relative min-h-[70vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-24 pb-12">
