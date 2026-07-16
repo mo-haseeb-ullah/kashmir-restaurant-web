@@ -8,7 +8,7 @@ export default function About() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative min-h-[40vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-20 pb-8">
+      <div className="relative min-h-[45vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-32 pb-12">
         <img 
           src="https://images.unsplash.com/photo-1544148103-0773bf10d330?w=1600&q=80" 
           alt="Restaurant Ambiance" 
