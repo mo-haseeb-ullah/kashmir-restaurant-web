@@ -144,6 +144,14 @@ export const deleteMenuItem = async (id) => {
 };
 
 export const listenToMenu = (callback) => {
+  // FAST CACHE LOAD: Instantly show cached menu while Firebase connects
+  const cached = localStorage.getItem('kashmir_menu_cache');
+  if (cached) {
+    try { callback(JSON.parse(cached)); } catch(e) {}
+  } else {
+    callback(defaultMenu);
+  }
+
   const q = query(collection(db, 'menu'));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     if (snapshot.empty) {
@@ -163,6 +171,9 @@ export const listenToMenu = (callback) => {
         const bVal = parseInt(b.id) || b.sortId || 0;
         return aVal - bVal;
       });
+      
+      // Update Cache
+      localStorage.setItem('kashmir_menu_cache', JSON.stringify(menu));
       callback(menu);
     }
   });
