@@ -205,19 +205,19 @@ export default function Home() {
         
         {/* Header & Search */}
         <div className="text-center pt-10 pb-6 px-4">
-          <h2 className="text-luxury-gold text-xs font-bold tracking-[0.3em] uppercase mb-1">Our Menu</h2>
-          <h3 className="text-3xl font-black text-luxury-text font-serif">Culinary Excellence</h3>
-          <div className="w-16 h-1 bg-luxury-red mx-auto mt-4 mb-8"></div>
+          <h2 className="text-[#D4AF37] text-xs font-bold tracking-[0.3em] uppercase mb-1">Our Menu</h2>
+          <h3 className="text-3xl font-black text-[#111827] font-serif">Culinary Excellence</h3>
+          <div className="w-16 h-1 bg-[#991B1B] mx-auto mt-4 mb-8"></div>
           
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto relative px-2">
-            <SearchIcon size={20} className="absolute left-6 top-1/2 transform -translate-y-1/2 text-luxury-muted" />
+            <SearchIcon size={20} className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input 
               type="text" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search dishes..." 
-              className="w-full bg-luxury-card text-luxury-text border border-gray-800 rounded-full pl-12 pr-6 py-3 focus:outline-none focus:border-luxury-red transition text-sm font-medium placeholder-luxury-muted"
+              className="w-full bg-white text-[#111827] border border-gray-200 rounded-full pl-12 pr-6 py-3 focus:outline-none focus:border-[#D4AF37] transition text-sm font-medium placeholder-gray-400 shadow-sm"
             />
           </div>
         </div>
@@ -235,8 +235,8 @@ export default function Home() {
               onClick={() => setActiveCategory(cat)}
               className={`snap-start whitespace-nowrap px-5 py-2 rounded-full font-bold text-xs transition tracking-wide border ${
                 activeCategory === cat 
-                ? 'bg-luxury-red text-luxury-text border-luxury-red' 
-                : 'bg-luxury-card text-luxury-muted border-gray-800 hover:border-gray-600'
+                ? 'bg-[#991B1B] text-white border-[#991B1B]' 
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
               }`}
             >
               {cat}
@@ -247,7 +247,7 @@ export default function Home() {
 
         {/* Menu Grid - Luxury Style */}
         <div className="w-full px-2">
-          <h2 className="text-luxury-text text-center font-serif text-xl font-bold mb-6">Our Deals</h2>
+          <h2 className="text-[#111827] text-center font-serif text-2xl font-bold mb-6">Our Deals</h2>
           
           {/* We use Flexbox to guarantee 2 boxes per row on mobile to fix layout bugs */}
           <div className="flex flex-wrap max-w-7xl mx-auto px-1">
