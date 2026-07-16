@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem } from '../services/db';
 import { Link } from 'react-router-dom';
@@ -31,9 +31,27 @@ export default function Admin() {
   // Error state for login
   const [loginError, setLoginError] = useState('');
 
+  const previousOrderIds = useRef(new Set());
+  const notificationSound = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'));
+
   useEffect(() => {
     if (isLoggedIn) {
-      const unsubOrders = listenToOrders(data => setOrders(data));
+      const unsubOrders = listenToOrders(data => {
+        const currentIds = new Set(data.map(o => o.id));
+        
+        if (previousOrderIds.current.size > 0) {
+          const newOrders = data.filter(o => !previousOrderIds.current.has(o.id));
+          if (newOrders.length > 0) {
+            notificationSound.current.play().catch(e => console.log('Audio play failed', e));
+            const newest = newOrders[0];
+            const name = newest.customer?.name || 'a customer';
+            showToast(`🔔 New order received from ${name}!`);
+          }
+        }
+        
+        previousOrderIds.current = currentIds;
+        setOrders(data);
+      });
       const unsubMenu = listenToMenu(data => setMenuItems(data));
       return () => { unsubOrders(); unsubMenu(); };
     }
