@@ -162,12 +162,12 @@ const defaultMenu = [
 ];
 
 const getMenu = () => {
-  const version = localStorage.getItem('menu_version_v3');
+  const version = localStorage.getItem('menu_version_v4');
   let data = localStorage.getItem(MENU_KEY);
   
   if (!data || !version) {
     localStorage.setItem(MENU_KEY, JSON.stringify(defaultMenu));
-    localStorage.setItem('menu_version_v3', 'true');
+    localStorage.setItem('menu_version_v4', 'true');
     // Dispatch event so Home/Admin instantly re-render if they are already mounted
     setTimeout(() => window.dispatchEvent(new Event('menu_updated')), 100);
     return defaultMenu;
