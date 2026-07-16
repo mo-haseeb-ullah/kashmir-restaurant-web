@@ -42,7 +42,9 @@ export default function AuthModal() {
       setIsAuthModalOpen(false);
       setFormData({ name: '', phone: '', password: '' }); // Reset
     } catch (err) {
-      setError(err.message || 'Authentication failed. Please try again.');
+      console.error("Auth error:", err);
+      const safeMsgs = ['User not found!', 'Invalid password!', 'Phone number already registered!'];
+      setError(safeMsgs.includes(err.message) ? err.message : 'Authentication failed. Please try again later.');
     } finally {
       setIsLoading(false);
     }

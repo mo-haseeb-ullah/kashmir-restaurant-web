@@ -91,6 +91,7 @@ export default function CartDrawer() {
       setIsCheckingOut(false);
       setIsSuccess(true);
     } catch (err) {
+      console.error("Checkout error:", err);
       setCheckoutError("Failed to place order. Please try again.");
     }
   };

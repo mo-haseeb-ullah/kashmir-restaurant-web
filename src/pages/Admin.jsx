@@ -92,14 +92,19 @@ export default function Admin() {
 
   const handleMenuSubmit = async (e) => {
     e.preventDefault();
-    if (editingItem) {
-      await updateMenuItem(editingItem.id, menuForm);
-      showToast(`Successfully updated "${menuForm.name}"!`);
-    } else {
-      await addMenuItem(menuForm);
-      showToast(`Successfully added "${menuForm.name}" to the menu!`);
+    try {
+      if (editingItem) {
+        await updateMenuItem(editingItem.id, menuForm);
+        showToast(`Successfully updated "${menuForm.name}"!`);
+      } else {
+        await addMenuItem(menuForm);
+        showToast(`Successfully added "${menuForm.name}" to the menu!`);
+      }
+      setIsMenuModalOpen(false);
+    } catch (err) {
+      console.error("Menu save error:", err);
+      showToast("Failed to save menu item. Please try again later.");
     }
-    setIsMenuModalOpen(false);
   };
 
   const handleDelete = (item) => {
@@ -108,9 +113,15 @@ export default function Admin() {
 
   const confirmDelete = async () => {
     if (!itemToDelete) return;
-    await deleteMenuItem(itemToDelete.id);
-    showToast(`"${itemToDelete.name}" was removed from the menu.`);
-    setItemToDelete(null);
+    try {
+      await deleteMenuItem(itemToDelete.id);
+      showToast(`"${itemToDelete.name}" was removed from the menu.`);
+    } catch (err) {
+      console.error("Delete menu item error:", err);
+      showToast("Failed to delete item. Please try again later.");
+    } finally {
+      setItemToDelete(null);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -316,12 +327,12 @@ export default function Admin() {
 
                           <div className="p-3 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
                             {order.status === 'New' && (
-                              <button onClick={() => updateOrderStatus(order.id, 'Preparing')} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
+                              <button onClick={() => updateOrderStatus(order.id, 'Preparing').catch(e => { console.error('Status update error', e); showToast('Failed to update status.'); })} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
                                 <CookingPot size={14}/> Start Preparing
                               </button>
                             )}
                             {order.status === 'Preparing' && (
-                              <button onClick={() => updateOrderStatus(order.id, 'Delivered')} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
+                              <button onClick={() => updateOrderStatus(order.id, 'Delivered').catch(e => { console.error('Status update error', e); showToast('Failed to update status.'); })} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
                                 <CheckCircle2 size={14}/> Mark Delivered
                               </button>
                             )}
