@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon } from 'lucide-react';
+import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem } from '../services/db';
 import { Link } from 'react-router-dom';
 
@@ -24,6 +24,9 @@ export default function Admin() {
   
   // Toast State
   const [toastMessage, setToastMessage] = useState(null);
+
+  // Delete Modal State
+  const [itemToDelete, setItemToDelete] = useState(null);
   
   // Error state for login
   const [loginError, setLoginError] = useState('');
@@ -81,11 +84,15 @@ export default function Admin() {
     setIsMenuModalOpen(false);
   };
 
-  const handleDelete = async (item) => {
-    if(window.confirm(`Are you sure you want to delete ${item.name}?`)) {
-      await deleteMenuItem(item.id);
-      showToast(`"${item.name}" was removed from the menu.`);
-    }
+  const handleDelete = (item) => {
+    setItemToDelete(item);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+    await deleteMenuItem(itemToDelete.id);
+    showToast(`"${itemToDelete.name}" was removed from the menu.`);
+    setItemToDelete(null);
   };
 
   const getStatusColor = (status) => {
@@ -503,6 +510,37 @@ export default function Admin() {
                 </button>
               </div>
 
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {itemToDelete && (
+        <div className="fixed inset-0 bg-black/80 z-[150] backdrop-blur-md flex items-center justify-center p-4 animate-[fadeIn_0.2s_ease-out]">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all animate-[slideUp_0.3s_ease-out]">
+            <div className="p-6 text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600">
+                <AlertCircle size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-[#111827] mb-2">Delete Dish?</h3>
+              <p className="text-gray-500 mb-6 text-sm">
+                Are you sure you want to delete <span className="font-bold text-[#111827]">{itemToDelete.name}</span>? This action cannot be undone.
+              </p>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setItemToDelete(null)}
+                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition text-sm"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmDelete}
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition shadow-lg text-sm"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         </div>
