@@ -24,6 +24,7 @@ export default function Admin() {
   
   // Toast State
   const [toastMessage, setToastMessage] = useState(null);
+  const [toastType, setToastType] = useState('success');
 
   // Delete Modal State
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -85,15 +86,16 @@ export default function Admin() {
     setIsMenuModalOpen(true);
   };
 
-  const showToast = (msg) => {
+  const showToast = (msg, type = 'success') => {
     setToastMessage(msg);
+    setToastType(type);
     setTimeout(() => setToastMessage(null), 4000);
   };
 
   const handleMenuSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!menuForm.name || !menuForm.category || !menuForm.price || !menuForm.image || !menuForm.desc) {
-      showToast("Please fill in all required fields.");
+      showToast("Please fill in all required fields.", "error");
       return;
     }
     try {
@@ -107,7 +109,7 @@ export default function Admin() {
       setIsMenuModalOpen(false);
     } catch (err) {
       console.error("Menu save error:", err);
-      showToast("Failed to save menu item. Please try again later.");
+      showToast("Failed to save menu item. Please try again later.", "error");
     }
   };
 
@@ -122,7 +124,7 @@ export default function Admin() {
       showToast(`"${itemToDelete.name}" was removed from the menu.`);
     } catch (err) {
       console.error("Delete menu item error:", err);
-      showToast("Failed to delete item. Please try again later.");
+      showToast("Failed to delete item. Please try again later.", "error");
     } finally {
       setItemToDelete(null);
     }
@@ -331,12 +333,12 @@ export default function Admin() {
 
                           <div className="p-3 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
                             {order.status === 'New' && (
-                              <button onClick={() => updateOrderStatus(order.id, 'Preparing').catch(e => { console.error('Status update error', e); showToast('Failed to update status.'); })} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
+                              <button onClick={() => updateOrderStatus(order.id, 'Preparing').catch(e => { console.error('Status update error', e); showToast('Failed to update status.', 'error'); })} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
                                 <CookingPot size={14}/> Start Preparing
                               </button>
                             )}
                             {order.status === 'Preparing' && (
-                              <button onClick={() => updateOrderStatus(order.id, 'Delivered').catch(e => { console.error('Status update error', e); showToast('Failed to update status.'); })} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
+                              <button onClick={() => updateOrderStatus(order.id, 'Delivered').catch(e => { console.error('Status update error', e); showToast('Failed to update status.', 'error'); })} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
                                 <CheckCircle2 size={14}/> Mark Delivered
                               </button>
                             )}
@@ -581,9 +583,9 @@ export default function Admin() {
 
       {/* TOAST NOTIFICATION */}
       {toastMessage && (
-        <div className="fixed bottom-8 right-8 z-[200] bg-white border-l-4 border-green-500 shadow-2xl rounded-lg p-4 flex items-center gap-3 animate-[slideIn_0.3s_ease-out_forwards]">
-          <div className="bg-green-100 text-green-600 p-2 rounded-full">
-            <CheckCircle2 size={20} />
+        <div className={`fixed bottom-8 right-8 z-[200] bg-white border-l-4 shadow-2xl rounded-lg p-4 flex items-center gap-3 animate-[slideIn_0.3s_ease-out_forwards] ${toastType === 'error' ? 'border-red-500' : 'border-green-500'}`}>
+          <div className={`p-2 rounded-full ${toastType === 'error' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>
+            {toastType === 'error' ? <AlertCircle size={20} /> : <CheckCircle2 size={20} />}
           </div>
           <p className="font-bold text-[#111827] text-sm pr-4">{toastMessage}</p>
         </div>

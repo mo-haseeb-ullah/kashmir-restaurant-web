@@ -154,12 +154,12 @@ export const addMenuItem = async (itemData) => {
 };
 
 export const updateMenuItem = async (id, updatedData) => {
-  const itemRef = doc(db, 'menu', id);
+  const itemRef = doc(db, 'menu', id.toString());
   await updateDoc(itemRef, updatedData);
 };
 
 export const deleteMenuItem = async (id) => {
-  const itemRef = doc(db, 'menu', id);
+  const itemRef = doc(db, 'menu', id.toString());
   await deleteDoc(itemRef);
 };
 
