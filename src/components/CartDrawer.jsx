@@ -53,7 +53,7 @@ export default function CartDrawer() {
     return null;
   }
 
-  const handleCheckout = (e) => {
+  const handleCheckout = async (e) => {
     e.preventDefault();
     setCheckoutError('');
 
@@ -83,12 +83,16 @@ export default function CartDrawer() {
       total: finalTotal
     };
 
-    // Save to Database instantly
-    addOrder(orderData);
-    
-    clearCart();
-    setIsCheckingOut(false);
-    setIsSuccess(true);
+    try {
+      // Save to Database instantly
+      await addOrder(orderData);
+      
+      clearCart();
+      setIsCheckingOut(false);
+      setIsSuccess(true);
+    } catch (err) {
+      setCheckoutError("Failed to place order. Please try again.");
+    }
   };
 
   return (

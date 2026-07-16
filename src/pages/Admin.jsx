@@ -69,21 +69,21 @@ export default function Admin() {
     setTimeout(() => setToastMessage(null), 4000);
   };
 
-  const handleMenuSubmit = (e) => {
+  const handleMenuSubmit = async (e) => {
     e.preventDefault();
     if (editingItem) {
-      updateMenuItem(editingItem.id, menuForm);
+      await updateMenuItem(editingItem.id, menuForm);
       showToast(`Successfully updated "${menuForm.name}"!`);
     } else {
-      addMenuItem(menuForm);
+      await addMenuItem(menuForm);
       showToast(`Successfully added "${menuForm.name}" to the menu!`);
     }
     setIsMenuModalOpen(false);
   };
 
-  const handleDelete = (item) => {
+  const handleDelete = async (item) => {
     if(window.confirm(`Are you sure you want to delete ${item.name}?`)) {
-      deleteMenuItem(item.id);
+      await deleteMenuItem(item.id);
       showToast(`"${item.name}" was removed from the menu.`);
     }
   };

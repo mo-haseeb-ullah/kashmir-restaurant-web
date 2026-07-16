@@ -18,8 +18,8 @@ export default function Navbar() {
       return;
     }
     
-    const checkOrder = () => {
-      const order = getUserActiveOrder(user.id);
+    const checkOrder = async () => {
+      const order = await getUserActiveOrder(user.id);
       setActiveOrder(order);
       
       if (order && order.estimatedDeliveryTime) {

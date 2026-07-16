@@ -18,8 +18,11 @@ export default function Profile() {
       navigate('/');
       return;
     }
-    const userOrders = getUserOrders(user.id);
-    setOrders(userOrders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+    const fetchOrders = async () => {
+      const userOrders = await getUserOrders(user.id);
+      setOrders(userOrders);
+    };
+    fetchOrders();
   }, [user, navigate]);
 
   const handleReorder = (order) => {
