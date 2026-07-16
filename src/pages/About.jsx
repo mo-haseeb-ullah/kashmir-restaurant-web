@@ -30,15 +30,26 @@ export default function About() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
           <div>
-            <h2 className="text-luxury-red text-sm font-bold tracking-[0.2em] uppercase mb-4">Our Story</h2>
-            <h3 className="text-3xl font-black text-luxury-card font-serif mb-6 leading-snug">
+            <h2 className="text-luxury-red text-sm font-bold tracking-[0.2em] uppercase mb-4">Our Story | ہماری کہانی</h2>
+            <h3 className="text-3xl font-black text-luxury-card font-serif mb-2 leading-snug">
               A Legacy of Authentic Taste in Khushab
             </h3>
-            <p className="text-gray-600 leading-relaxed mb-6">
+            <h3 className="text-2xl font-bold text-luxury-card font-serif mb-6 leading-snug" dir="rtl">
+              خوشاب میں روایتی ذائقے کی میراث
+            </h3>
+            
+            <p className="text-gray-600 leading-relaxed mb-4">
               Located on the bustling Khushab - Sakesar Road, Kashmir Restaurant has been a cornerstone of traditional Pakistani dining for years. We pride ourselves on using original recipes, premium spices, and the freshest ingredients available.
             </p>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-gray-600 leading-relaxed mb-6 font-medium text-lg" dir="rtl">
+              خوشاب سکیسر روڈ پر واقع، کشمیر ریسٹورنٹ سالوں سے روایتی پاکستانی کھانوں کا ایک اہم مرکز رہا ہے۔ ہمیں اپنی اصلی ترکیبوں، بہترین مسالوں اور تازہ ترین اجزاء کے استعمال پر فخر ہے۔
+            </p>
+
+            <p className="text-gray-600 leading-relaxed mb-4">
               From our famous slow-cooked Karahis to our rich, buttery breakfasts, every dish is crafted to deliver an unforgettable, mouth-watering experience that keeps our guests coming back.
+            </p>
+            <p className="text-gray-600 leading-relaxed font-medium text-lg" dir="rtl">
+              ہماری مشہور کڑاہی سے لے کر مکھن سے بھرپور لذیذ ناشتے تک، ہر ڈش اس طرح تیار کی جاتی ہے کہ ایک ناقابل فراموش اور منہ میں پانی لانے والا تجربہ فراہم کرے جو ہمارے مہمانوں کو بار بار آنے پر مجبور کر دیتا ہے۔
             </p>
           </div>
           <div className="relative">
@@ -53,9 +64,13 @@ export default function About() {
 
         <div className="bg-luxury-card text-luxury-text rounded-sm p-12 text-center shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-luxury-gold"></div>
-          <h3 className="text-2xl font-serif mb-4 text-luxury-gold">"No Compromise on Quality"</h3>
-          <p className="text-gray-300 font-light italic text-lg max-w-2xl mx-auto">
+          <h3 className="text-2xl font-serif mb-2 text-luxury-gold">"No Compromise on Quality"</h3>
+          <h3 className="text-2xl font-serif mb-6 text-luxury-gold" dir="rtl">"معیار پر کوئی سمجھوتہ نہیں"</h3>
+          <p className="text-gray-300 font-light italic text-lg max-w-2xl mx-auto mb-4">
             Our mission is simple: To serve the most delicious, hygienic, and authentic desi food in Khushab. We treat every customer like family.
+          </p>
+          <p className="text-gray-300 font-light text-xl max-w-2xl mx-auto" dir="rtl">
+            ہمارا مقصد بہت سادہ ہے: خوشاب میں انتہائی لذیذ، صحت بخش اور مستند دیسی کھانا پیش کرنا۔ ہم اپنے ہر گاہک کو خاندان کی طرح سمجھتے ہیں۔
           </p>
         </div>
 
