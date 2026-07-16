@@ -91,7 +91,11 @@ export default function Admin() {
   };
 
   const handleMenuSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    if (!menuForm.name || !menuForm.category || !menuForm.price || !menuForm.image || !menuForm.desc) {
+      showToast("Please fill in all required fields.");
+      return;
+    }
     try {
       if (editingItem) {
         await updateMenuItem(editingItem.id, menuForm);
@@ -530,8 +534,8 @@ export default function Admin() {
                   Cancel
                 </button>
                 <button 
-                  type="submit" 
-                  form="menu-form" 
+                  type="button" 
+                  onClick={handleMenuSubmit}
                   className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-lg flex items-center justify-center gap-2 text-sm"
                 >
                   {editingItem ? <CheckCircle2 size={18}/> : <Plus size={18}/>}
