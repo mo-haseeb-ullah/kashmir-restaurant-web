@@ -11,6 +11,7 @@ export default function CartDrawer() {
   const [formData, setFormData] = useState({ name: '', phone: '', address: '' });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [checkoutError, setCheckoutError] = useState('');
   const [orderType, setOrderType] = useState('Delivery');
@@ -86,6 +87,7 @@ export default function CartDrawer() {
     };
 
     try {
+      setIsSubmitting(true);
       // Save to Database instantly
       await addOrder(orderData);
       
@@ -95,6 +97,8 @@ export default function CartDrawer() {
     } catch (err) {
       console.error("Checkout error:", err);
       setCheckoutError("Failed to place order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -448,10 +452,15 @@ export default function CartDrawer() {
               <button 
                 type="submit"
                 form="checkout-form"
-                className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-3 uppercase tracking-widest text-sm shadow-xl"
+                disabled={isSubmitting}
+                className={`w-full ${isSubmitting ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white'} font-bold py-4 rounded-xl transition flex items-center justify-center gap-3 uppercase tracking-widest text-sm shadow-xl`}
               >
-                <CheckCircle2 size={18} />
-                Confirm Order Securely
+                {isSubmitting ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <CheckCircle2 size={18} />
+                )}
+                {isSubmitting ? 'Processing Order...' : 'Confirm Order Securely'}
               </button>
             )}
           </div>
