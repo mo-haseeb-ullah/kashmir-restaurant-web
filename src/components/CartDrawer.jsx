@@ -13,6 +13,7 @@ export default function CartDrawer() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [checkoutError, setCheckoutError] = useState('');
+  const [orderType, setOrderType] = useState('Delivery');
   
   // Promo Code State
   const [promoCodeInput, setPromoCodeInput] = useState('');
@@ -62,8 +63,8 @@ export default function CartDrawer() {
       return;
     }
     
-    if (!formData.name || !formData.phone || !formData.address) {
-      setCheckoutError("Please fill in all delivery details.");
+    if (!formData.name || !formData.phone || (orderType === 'Delivery' && !formData.address)) {
+      setCheckoutError(orderType === 'Delivery' ? "Please fill in all delivery details." : "Please provide your name and phone number.");
       return;
     }
     
@@ -73,6 +74,7 @@ export default function CartDrawer() {
     }
 
     const orderData = {
+      orderType,
       userId: user ? user.id : null,
       customer: formData,
       paymentMethod,
@@ -259,9 +261,27 @@ export default function CartDrawer() {
                     <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4AF37] rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#991B1B] rounded-full blur-[60px] opacity-20 pointer-events-none"></div>
                     
-                    <h3 className="font-black text-[#D4AF37] uppercase tracking-widest text-xs mb-6 flex items-center gap-2">
-                      <MapPin size={16} /> Delivery Details
+                    <h3 className="font-black text-[#D4AF37] uppercase tracking-widest text-xs mb-4 flex items-center gap-2">
+                      <MapPin size={16} /> Order Details
                     </h3>
+
+                    {/* ORDER TYPE TOGGLE */}
+                    <div className="flex bg-gray-800 p-1 rounded-xl mb-6 relative z-10 shadow-inner border border-gray-700">
+                      <button 
+                        type="button"
+                        onClick={() => setOrderType('Delivery')}
+                        className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition flex items-center justify-center gap-2 ${orderType === 'Delivery' ? 'bg-[#D4AF37] text-[#111827] shadow-sm' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                      >
+                        🛵 Delivery
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => setOrderType('Takeaway')}
+                        className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition flex items-center justify-center gap-2 ${orderType === 'Takeaway' ? 'bg-[#D4AF37] text-[#111827] shadow-sm' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
+                      >
+                        🛍️ Pick-up
+                      </button>
+                    </div>
                     
                     <form id="checkout-form" onSubmit={handleCheckout} className="space-y-5 relative z-10">
                       
@@ -304,20 +324,28 @@ export default function CartDrawer() {
                         </div>
                       </div>
                       
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Complete Delivery Address</label>
-                        <div className="relative">
-                          <MapPin size={18} className="absolute left-4 top-4 text-[#D4AF37]" />
-                          <textarea 
-                            required
-                            rows="3"
-                            value={formData.address}
-                            onChange={e => setFormData({...formData, address: e.target.value})}
-                            className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-[#D4AF37] text-sm text-white font-medium resize-none transition"
-                            placeholder="House No, Street, Area, City"
-                          ></textarea>
+                      {orderType === 'Delivery' ? (
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Complete Delivery Address</label>
+                          <div className="relative">
+                            <MapPin size={18} className="absolute left-4 top-4 text-[#D4AF37]" />
+                            <textarea 
+                              required
+                              rows="3"
+                              value={formData.address}
+                              onChange={e => setFormData({...formData, address: e.target.value})}
+                              className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-[#D4AF37] text-sm text-white font-medium resize-none transition"
+                              placeholder="House No, Street, Area, City"
+                            ></textarea>
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 p-5 rounded-xl text-center">
+                          <p className="text-[#D4AF37] font-bold text-xs uppercase tracking-widest mb-1">Pick up your order from:</p>
+                          <p className="text-white font-black text-xl font-serif">Kashmir Restaurant</p>
+                          <p className="text-gray-400 text-sm mt-1">Main Bazaar, Khushab</p>
+                        </div>
+                      )}
                     </form>
                   </div>
 

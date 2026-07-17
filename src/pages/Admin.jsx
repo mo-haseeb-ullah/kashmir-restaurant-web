@@ -314,7 +314,20 @@ export default function Admin() {
                             <div className="flex-1 space-y-3">
                               <div><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Customer</p><p className="font-bold text-sm text-[#111827]">{order.customer.name}</p></div>
                               <div><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Phone</p><p className="font-bold text-sm text-[#111827]">{order.customer.phone}</p></div>
-                              <div><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Address</p><p className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-2 rounded-lg border border-gray-100">{order.customer.address}</p></div>
+                              
+                              <div className="mt-4 border-t border-gray-100 pt-3">
+                                <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest mb-2 ${order.orderType === 'Takeaway' ? 'bg-purple-100 text-purple-700 border border-purple-200' : 'bg-blue-100 text-blue-700 border border-blue-200'}`}>
+                                  {order.orderType === 'Takeaway' ? <ShoppingBag size={14} /> : <MapPin size={14} />}
+                                  {order.orderType === 'Takeaway' ? 'Pick-Up / Takeaway' : 'Delivery'}
+                                </div>
+                                
+                                {(!order.orderType || order.orderType === 'Delivery') && (
+                                  <div>
+                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Address</p>
+                                    <p className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-2 rounded-lg border border-gray-100">{order.customer.address}</p>
+                                  </div>
+                                )}
+                              </div>
                             </div>
 
                             <div className="flex-1 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
