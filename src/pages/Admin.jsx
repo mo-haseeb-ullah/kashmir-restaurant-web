@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin } from 'lucide-react';
-import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem } from '../services/db';
+import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin, Settings } from 'lucide-react';
+import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem, getAdminPasswordHash, hashPassword, updateAdminPasswordHash } from '../services/db';
 import { Link } from 'react-router-dom';
 
 export default function Admin() {
@@ -30,7 +30,18 @@ export default function Admin() {
   const [itemToDelete, setItemToDelete] = useState(null);
   
   // Error state for login
+  // Error state for login
   const [loginError, setLoginError] = useState('');
+
+  // Settings State
+  const [adminPasswordHash, setAdminPasswordHash] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    getAdminPasswordHash().then(hash => setAdminPasswordHash(hash));
+  }, []);
 
   const previousOrderIds = useRef(new Set());
   const notificationSound = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'));
@@ -58,7 +69,7 @@ export default function Admin() {
     }
   }, [isLoggedIn]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
     
@@ -67,7 +78,9 @@ export default function Admin() {
       return;
     }
     
-    if (password === 'admin123') {
+    const inputHash = await hashPassword(password);
+    
+    if (inputHash === adminPasswordHash) {
       setIsLoggedIn(true);
     } else {
       setLoginError('Incorrect password! Access denied.');
@@ -111,6 +124,30 @@ export default function Admin() {
       console.error("Menu save error:", err);
       showToast("Failed to save menu item. Please try again later.", "error");
     }
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      showToast("Please fill in all fields.", "error");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      showToast("New passwords do not match.", "error");
+      return;
+    }
+    const oldHash = await hashPassword(oldPassword);
+    if (oldHash !== adminPasswordHash) {
+      showToast("Current password is incorrect.", "error");
+      return;
+    }
+    const newHash = await hashPassword(newPassword);
+    await updateAdminPasswordHash(newHash);
+    setAdminPasswordHash(newHash);
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    showToast("Password updated successfully!");
   };
 
   const handleDelete = (item) => {
@@ -215,6 +252,12 @@ export default function Admin() {
           >
             <UtensilsCrossed size={18} /> Menu Management
           </button>
+          <button 
+            onClick={() => setAdminSection('settings')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold tracking-widest uppercase text-xs ${adminSection === 'settings' ? 'bg-[#D4AF37] text-[#111827]' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
+          >
+            <Settings size={18} /> Settings
+          </button>
         </nav>
 
         <div className="p-4 border-t border-gray-800">
@@ -230,7 +273,7 @@ export default function Admin() {
         {/* Top Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10 px-8 py-4 flex justify-between items-center">
           <h2 className="text-2xl font-black font-serif text-[#111827]">
-            {adminSection === 'orders' ? 'Live Order Dashboard' : 'Menu Management CMS'}
+            {adminSection === 'orders' ? 'Live Order Dashboard' : adminSection === 'menu' ? 'Menu Management CMS' : 'Admin Settings'}
           </h2>
           <Link to="/" target="_blank" className="text-sm font-bold text-gray-500 hover:text-[#D4AF37] transition flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg">
             View Live Website <ChevronRight size={16}/>
@@ -416,6 +459,42 @@ export default function Admin() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {/* SECTION: SETTINGS */}
+          {adminSection === 'settings' && (
+            <div className="max-w-xl bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <h3 className="text-xl font-black font-serif text-[#111827] mb-6">Change Master Password</h3>
+              <form onSubmit={handlePasswordChange} className="space-y-6">
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-widest mb-2">Current Password</label>
+                  <input 
+                    type="password" required
+                    value={oldPassword} onChange={e => setOldPassword(e.target.value)}
+                    className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 bg-gray-50 focus:bg-white focus:border-[#D4AF37] outline-none transition"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-widest mb-2">New Password</label>
+                  <input 
+                    type="password" required
+                    value={newPassword} onChange={e => setNewPassword(e.target.value)}
+                    className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 bg-gray-50 focus:bg-white focus:border-[#D4AF37] outline-none transition"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-widest mb-2">Confirm New Password</label>
+                  <input 
+                    type="password" required
+                    value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                    className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 bg-gray-50 focus:bg-white focus:border-[#D4AF37] outline-none transition"
+                  />
+                </div>
+                <button type="submit" className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white font-bold py-4 rounded-xl transition uppercase tracking-widest shadow-xl">
+                  Save New Password
+                </button>
+              </form>
             </div>
           )}
 

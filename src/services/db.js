@@ -1,9 +1,9 @@
 import { db } from './firebase';
-import { collection, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDocs, where, runTransaction } from 'firebase/firestore';
+import { collection, doc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, getDoc, getDocs, where, runTransaction } from 'firebase/firestore';
 
 // --- AUTH API ---
 
-const hashPassword = async (password) => {
+export const hashPassword = async (password) => {
   const msgBuffer = new TextEncoder().encode(password);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -104,6 +104,23 @@ export const listenToOrders = (callback) => {
     callback(orders);
   });
   return unsubscribe;
+};
+
+// --- ADMIN API ---
+
+export const getAdminPasswordHash = async () => {
+  const docRef = doc(db, 'settings', 'admin');
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists() && docSnap.data().passwordHash) {
+    return docSnap.data().passwordHash;
+  }
+  // Default hash for 'admin123'
+  return '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9';
+};
+
+export const updateAdminPasswordHash = async (newHash) => {
+  const docRef = doc(db, 'settings', 'admin');
+  await setDoc(docRef, { passwordHash: newHash }, { merge: true });
 };
 
 // --- MENU API ---
