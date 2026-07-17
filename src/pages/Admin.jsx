@@ -33,6 +33,13 @@ export default function Admin() {
   // Error state for login
   const [loginError, setLoginError] = useState('');
 
+  // Loading States
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [isSavingMenu, setIsSavingMenu] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
+
   // Settings State
   const [adminPasswordHash, setAdminPasswordHash] = useState('');
   const [oldPassword, setOldPassword] = useState('');
@@ -78,6 +85,7 @@ export default function Admin() {
       return;
     }
     
+    setIsLoggingIn(true);
     const inputHash = await hashPassword(password);
     
     if (inputHash === adminPasswordHash) {
@@ -85,6 +93,7 @@ export default function Admin() {
     } else {
       setLoginError('Incorrect password! Access denied.');
     }
+    setIsLoggingIn(false);
   };
 
   const openAddModal = () => {
@@ -111,6 +120,8 @@ export default function Admin() {
       showToast("Please fill in all required fields.", "error");
       return;
     }
+    
+    setIsSavingMenu(true);
     try {
       if (editingItem) {
         await updateMenuItem(editingItem.id, menuForm);
@@ -123,6 +134,8 @@ export default function Admin() {
     } catch (err) {
       console.error("Menu save error:", err);
       showToast("Failed to save menu item. Please try again later.", "error");
+    } finally {
+      setIsSavingMenu(false);
     }
   };
 
@@ -136,18 +149,24 @@ export default function Admin() {
       showToast("New passwords do not match.", "error");
       return;
     }
-    const oldHash = await hashPassword(oldPassword);
-    if (oldHash !== adminPasswordHash) {
-      showToast("Current password is incorrect.", "error");
-      return;
+    
+    setIsChangingPassword(true);
+    try {
+      const oldHash = await hashPassword(oldPassword);
+      if (oldHash !== adminPasswordHash) {
+        showToast("Current password is incorrect.", "error");
+        return;
+      }
+      const newHash = await hashPassword(newPassword);
+      await updateAdminPasswordHash(newHash);
+      setAdminPasswordHash(newHash);
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      showToast("Password updated successfully!");
+    } finally {
+      setIsChangingPassword(false);
     }
-    const newHash = await hashPassword(newPassword);
-    await updateAdminPasswordHash(newHash);
-    setAdminPasswordHash(newHash);
-    setOldPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    showToast("Password updated successfully!");
   };
 
   const handleDelete = (item) => {
@@ -156,6 +175,7 @@ export default function Admin() {
 
   const confirmDelete = async () => {
     if (!itemToDelete) return;
+    setIsDeleting(true);
     try {
       await deleteMenuItem(itemToDelete.id);
       showToast(`"${itemToDelete.name}" was removed from the menu.`);
@@ -163,7 +183,20 @@ export default function Admin() {
       console.error("Delete menu item error:", err);
       showToast("Failed to delete item. Please try again later.", "error");
     } finally {
+      setIsDeleting(false);
       setItemToDelete(null);
+    }
+  };
+
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    setUpdatingOrderId(orderId);
+    try {
+      await updateOrderStatus(orderId, newStatus);
+    } catch (e) {
+      console.error('Status update error', e);
+      showToast('Failed to update status.', 'error');
+    } finally {
+      setUpdatingOrderId(null);
     }
   };
 
@@ -212,9 +245,10 @@ export default function Admin() {
             
             <button 
               type="submit" 
-              className="w-full bg-[#D4AF37] hover:bg-[#c5a02e] text-[#111827] font-black py-4 rounded-xl transition shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] uppercase tracking-[0.2em]"
+              disabled={isLoggingIn}
+              className={`w-full ${isLoggingIn ? 'bg-[#c5a02e] cursor-not-allowed opacity-80' : 'bg-[#D4AF37] hover:bg-[#c5a02e] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]'} text-[#111827] font-black py-4 rounded-xl transition shadow-[0_0_20px_rgba(212,175,55,0.3)] uppercase tracking-[0.2em] flex justify-center items-center gap-3`}
             >
-              Unlock Access
+              {isLoggingIn ? <div className="w-5 h-5 border-2 border-[#111827] border-t-transparent rounded-full animate-spin"></div> : 'Unlock Access'}
             </button>
           </form>
         </div>
@@ -389,13 +423,15 @@ export default function Admin() {
 
                           <div className="p-3 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
                             {order.status === 'New' && (
-                              <button onClick={() => updateOrderStatus(order.id, 'Preparing').catch(e => { console.error('Status update error', e); showToast('Failed to update status.', 'error'); })} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
-                                <CookingPot size={14}/> Start Preparing
+                              <button disabled={updatingOrderId === order.id} onClick={() => handleUpdateOrderStatus(order.id, 'Preparing')} className={`bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-2 shadow-md ${updatingOrderId === order.id ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                                {updatingOrderId === order.id ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CookingPot size={14}/>}
+                                Start Preparing
                               </button>
                             )}
                             {order.status === 'Preparing' && (
-                              <button onClick={() => updateOrderStatus(order.id, 'Delivered').catch(e => { console.error('Status update error', e); showToast('Failed to update status.', 'error'); })} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-1 shadow-md">
-                                <CheckCircle2 size={14}/> Mark Delivered
+                              <button disabled={updatingOrderId === order.id} onClick={() => handleUpdateOrderStatus(order.id, 'Delivered')} className={`bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-2 shadow-md ${updatingOrderId === order.id ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                                {updatingOrderId === order.id ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CheckCircle2 size={14}/>}
+                                Mark Delivered
                               </button>
                             )}
                           </div>
@@ -491,8 +527,9 @@ export default function Admin() {
                     className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 bg-gray-50 focus:bg-white focus:border-[#D4AF37] outline-none transition"
                   />
                 </div>
-                <button type="submit" className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white font-bold py-4 rounded-xl transition uppercase tracking-widest shadow-xl">
-                  Save New Password
+                <button type="submit" disabled={isChangingPassword} className={`w-full ${isChangingPassword ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white'} font-bold py-4 rounded-xl transition uppercase tracking-widest shadow-xl flex justify-center items-center gap-3`}>
+                  {isChangingPassword ? <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div> : null}
+                  {isChangingPassword ? 'Saving...' : 'Save New Password'}
                 </button>
               </form>
             </div>
@@ -630,10 +667,11 @@ export default function Admin() {
                 <button 
                   type="button" 
                   onClick={handleMenuSubmit}
-                  className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-lg flex items-center justify-center gap-2 text-sm"
+                  disabled={isSavingMenu}
+                  className={`bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-lg flex items-center justify-center gap-2 text-sm ${isSavingMenu ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  {editingItem ? <CheckCircle2 size={18}/> : <Plus size={18}/>}
-                  {editingItem ? 'Save Changes' : 'Publish Dish'}
+                  {isSavingMenu ? <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div> : (editingItem ? <CheckCircle2 size={18}/> : <Plus size={18}/>)}
+                  {isSavingMenu ? 'Saving...' : (editingItem ? 'Save Changes' : 'Publish Dish')}
                 </button>
               </div>
 
@@ -663,9 +701,11 @@ export default function Admin() {
                 </button>
                 <button 
                   onClick={confirmDelete}
-                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition shadow-lg text-sm"
+                  disabled={isDeleting}
+                  className={`flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition shadow-lg text-sm flex justify-center items-center gap-2 ${isDeleting ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  Delete
+                  {isDeleting ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : null}
+                  {isDeleting ? 'Deleting...' : 'Delete'}
                 </button>
               </div>
             </div>

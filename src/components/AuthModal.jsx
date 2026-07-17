@@ -123,8 +123,9 @@ export default function AuthModal() {
             <button 
               type="submit" 
               disabled={isLoading}
-              className="w-full bg-luxury-card border border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-bg py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-xl mt-4 disabled:opacity-70 flex justify-center items-center gap-2"
+              className="w-full bg-luxury-card border border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-luxury-bg py-4 rounded-xl font-bold uppercase tracking-widest transition shadow-xl mt-4 disabled:opacity-70 flex justify-center items-center gap-3"
             >
+              {isLoading ? <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div> : null}
               {isLoading ? 'Processing...' : (isLoginMode ? 'Sign In Securely' : 'Create Account')}
             </button>
             
