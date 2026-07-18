@@ -311,133 +311,149 @@ export default function Admin() {
       <main className="flex-1 ml-0 md:ml-64 flex flex-col min-h-screen">
         
         {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10 px-8 py-4 flex justify-between items-center">
-          <h2 className="text-2xl font-black font-serif text-[#111827]">
-            {adminSection === 'orders' ? 'Live Order Dashboard' : adminSection === 'menu' ? 'Menu Management CMS' : 'Admin Settings'}
+        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10 px-4 md:px-8 py-3 md:py-4 flex justify-between items-center">
+          <h2 className="text-lg md:text-2xl font-black font-serif text-[#111827] truncate pr-2">
+            {adminSection === 'orders' ? 'Live Orders' : adminSection === 'menu' ? 'Menu CMS' : 'Settings'}
           </h2>
-          <Link to="/" target="_blank" className="text-sm font-bold text-gray-500 hover:text-[#D4AF37] transition flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg">
-            View Live Website <ChevronRight size={16}/>
+          <Link to="/" target="_blank" className="text-[10px] md:text-sm font-bold text-gray-500 hover:text-[#D4AF37] transition flex items-center gap-1 border border-gray-200 px-2 md:px-4 py-1.5 md:py-2 rounded-lg whitespace-nowrap">
+            View Site <ChevronRight size={14}/>
           </Link>
         </header>
 
-        <div className="p-8">
+        {/* Mobile Top Navigation */}
+        <div className="md:hidden bg-[#111827] flex justify-around p-2 shadow-md">
+          <button onClick={() => setAdminSection('orders')} className={`flex flex-col items-center p-2 rounded-lg ${adminSection === 'orders' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
+            <LayoutDashboard size={18} />
+            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Orders</span>
+          </button>
+          <button onClick={() => setAdminSection('menu')} className={`flex flex-col items-center p-2 rounded-lg ${adminSection === 'menu' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
+            <UtensilsCrossed size={18} />
+            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Menu</span>
+          </button>
+          <button onClick={() => setAdminSection('settings')} className={`flex flex-col items-center p-2 rounded-lg ${adminSection === 'settings' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
+            <Settings size={18} />
+            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Settings</span>
+          </button>
+          <button onClick={() => setIsLoggedIn(false)} className="flex flex-col items-center p-2 rounded-lg text-red-400 hover:text-red-500">
+            <LogOut size={18} />
+            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Logout</span>
+          </button>
+        </div>
+
+        <div className="p-3 md:p-8">
           
           {/* SECTION: LIVE ORDERS */}
           {adminSection === 'orders' && (
             <>
               {/* Dashboard Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-8">
+                <div className="bg-white p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Orders</p>
-                    <h3 className="text-3xl font-black text-[#111827] font-serif">{orders.length}</h3>
+                    <p className="text-[9px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Orders</p>
+                    <h3 className="text-xl md:text-3xl font-black text-[#111827] font-serif">{orders.length}</h3>
                   </div>
-                  <div className="bg-gray-100 p-3 rounded-full text-gray-600"><CheckCircle2 size={24}/></div>
+                  <div className="bg-gray-100 p-2 md:p-3 rounded-full text-gray-600 hidden sm:block"><CheckCircle2 size={20}/></div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-red-100 flex items-center justify-between">
+                <div className="bg-white p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-red-100 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold text-red-400 uppercase tracking-widest mb-1">New Orders</p>
-                    <h3 className="text-3xl font-black text-red-600 font-serif">{orders.filter(o=>o.status==='New').length}</h3>
+                    <p className="text-[9px] md:text-xs font-bold text-red-400 uppercase tracking-widest mb-1">New Orders</p>
+                    <h3 className="text-xl md:text-3xl font-black text-red-600 font-serif">{orders.filter(o=>o.status==='New').length}</h3>
                   </div>
-                  <div className="bg-red-100 p-3 rounded-full text-red-600 animate-pulse"><Bell size={24}/></div>
+                  <div className="bg-red-100 p-2 md:p-3 rounded-full text-red-600 animate-pulse hidden sm:block"><Bell size={20}/></div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-orange-100 flex items-center justify-between">
+                <div className="bg-white p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-orange-100 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold text-orange-400 uppercase tracking-widest mb-1">Preparing</p>
-                    <h3 className="text-3xl font-black text-orange-600 font-serif">{orders.filter(o=>o.status==='Preparing').length}</h3>
+                    <p className="text-[9px] md:text-xs font-bold text-orange-400 uppercase tracking-widest mb-1">Preparing</p>
+                    <h3 className="text-xl md:text-3xl font-black text-orange-600 font-serif">{orders.filter(o=>o.status==='Preparing').length}</h3>
                   </div>
-                  <div className="bg-orange-100 p-3 rounded-full text-orange-600"><CookingPot size={24}/></div>
+                  <div className="bg-orange-100 p-2 md:p-3 rounded-full text-orange-600 hidden sm:block"><CookingPot size={20}/></div>
                 </div>
-                <div className="bg-[#111827] text-white p-6 rounded-2xl shadow-xl flex flex-col justify-center">
-                   <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Revenue Today</p>
-                   <h3 className="text-3xl font-black text-[#D4AF37] font-serif">
-                     Rs. {orders.reduce((sum, order) => sum + order.total, 0).toLocaleString()}
+                <div className="bg-[#111827] text-white p-3 md:p-6 rounded-xl md:rounded-2xl shadow-xl flex flex-col justify-center">
+                   <p className="text-[9px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Revenue</p>
+                   <h3 className="text-xl md:text-3xl font-black text-[#D4AF37] font-serif">
+                     Rs.{orders.reduce((sum, order) => sum + order.total, 0).toLocaleString()}
                    </h3>
                 </div>
               </div>
 
               {/* Orders Kanban/List */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="flex border-b border-gray-100">
+                <div className="flex border-b border-gray-100 overflow-x-auto hide-scrollbar">
                   {['New', 'Preparing', 'Delivered'].map(tab => (
                     <button 
                       key={tab}
                       onClick={() => setActiveOrderTab(tab)}
-                      className={`flex-1 py-4 text-sm font-bold uppercase tracking-widest transition border-b-2 ${
+                      className={`flex-1 py-3 md:py-4 px-1 min-w-[90px] text-[10px] md:text-sm font-bold uppercase tracking-widest transition border-b-2 ${
                         activeOrderTab === tab ? 'border-[#D4AF37] text-[#111827] bg-gray-50' : 'border-transparent text-gray-400 hover:text-gray-600 hover:bg-gray-50'
                       }`}
                     >
-                      {tab} Orders ({orders.filter(o => o.status === tab).length})
+                      {tab} ({orders.filter(o => o.status === tab).length})
                     </button>
                   ))}
                 </div>
 
-                <div className="p-6 bg-gray-50/50 min-h-[500px]">
+                <div className="p-2 md:p-6 bg-gray-50/50 min-h-[300px] md:min-h-[500px]">
                   {filteredOrders.length === 0 ? (
                     <div className="h-64 flex flex-col items-center justify-center text-gray-400">
                       <ChefHat size={48} className="mb-4 text-gray-200" />
-                      <p className="text-lg font-serif">No {activeOrderTab} orders at the moment.</p>
+                      <p className="text-sm md:text-lg font-serif">No {activeOrderTab} orders.</p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6">
                       {filteredOrders.map(order => (
-                        <div key={order.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                          <div className="flex justify-between items-center p-4 border-b border-gray-100 bg-gray-50">
+                        <div key={order.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                          <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center p-2 border-b border-gray-100 bg-gray-50 gap-1">
                             <div>
-                              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Order ID</span>
-                              <h4 className="font-bold text-[#111827] font-serif">#{order.orderId || order.id}</h4>
+                              <span className="text-[8px] md:text-[10px] font-bold text-gray-500 uppercase tracking-widest">Order</span>
+                              <h4 className="font-bold text-[#111827] text-xs md:text-sm font-serif">#{order.orderId || order.id}</h4>
                             </div>
-                            <div className="text-right">
-                              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border ${getStatusColor(order.status)}`}>{order.status}</span>
-                              <p className="text-xs text-gray-400 mt-2 flex items-center justify-end gap-1"><Clock size={12}/> {new Date(order.timestamp).toLocaleTimeString()}</p>
+                            <div className="text-left xl:text-right flex xl:block justify-between items-center w-full xl:w-auto">
+                              <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-widest border ${getStatusColor(order.status)}`}>{order.status}</span>
+                              <p className="text-[8px] md:text-[10px] text-gray-400 mt-0 xl:mt-1 flex items-center gap-1"><Clock size={8}/> {new Date(order.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
                             </div>
                           </div>
 
-                          <div className="p-4 flex flex-col md:flex-row gap-6">
-                            <div className="flex-1 space-y-3">
-                              <div><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Customer</p><p className="font-bold text-sm text-[#111827]">{order.customer.name}</p></div>
-                              <div><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Phone</p><p className="font-bold text-sm text-[#111827]">{order.customer.phone}</p></div>
+                          <div className="p-2 md:p-3 flex flex-col gap-2 flex-1">
+                            <div className="space-y-1">
+                              <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Name</p><p className="font-bold text-[10px] md:text-xs text-[#111827] truncate w-16 md:w-32 text-right">{order.customer.name}</p></div>
+                              <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Phone</p><p className="font-bold text-[10px] md:text-xs text-[#111827] truncate w-16 md:w-32 text-right">{order.customer.phone}</p></div>
                               
-                              <div className="mt-4 border-t border-gray-100 pt-3">
-                                <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest mb-2 ${order.orderType === 'Takeaway' ? 'bg-purple-100 text-purple-700 border border-purple-200' : 'bg-blue-100 text-blue-700 border border-blue-200'}`}>
-                                  {order.orderType === 'Takeaway' ? <ShoppingBag size={14} /> : <MapPin size={14} />}
-                                  {order.orderType === 'Takeaway' ? 'Pick-Up / Takeaway' : 'Delivery'}
-                                </div>
-                                
-                                {(!order.orderType || order.orderType === 'Delivery') && (
-                                  <div>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Address</p>
-                                    <p className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-2 rounded-lg border border-gray-100">{order.customer.address}</p>
-                                  </div>
-                                )}
-                              </div>
+                              {order.orderType === 'Delivery' && (
+                                <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Loc</p><p className="text-[9px] md:text-[10px] text-gray-600 truncate w-16 md:w-32 text-right" title={order.customer.address}>{order.customer.address}</p></div>
+                              )}
+                              {order.orderType === 'Takeaway' && (
+                                <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Type</p><p className="font-bold text-[9px] md:text-[10px] text-[#D4AF37] uppercase">Pick-up</p></div>
+                              )}
                             </div>
 
-                            <div className="flex-1 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Order Summary</p>
-                              <ul className="space-y-2 mb-4">
+                            <div className="border-t border-gray-100 pt-2 flex-1">
+                              <div className="space-y-1 max-h-24 overflow-y-auto hide-scrollbar">
                                 {order.items.map((item, idx) => (
-                                  <li key={idx} className="flex justify-between text-xs font-medium"><span className="text-gray-600">{item.quantity}x {item.name}</span></li>
+                                  <div key={idx} className="flex justify-between text-[9px] md:text-xs">
+                                    <span className="text-gray-800 truncate pr-1"><span className="text-[#D4AF37] font-bold">{item.quantity}x</span> {item.name}</span>
+                                    <span className="text-gray-600 font-bold whitespace-nowrap">Rs.{item.price * item.quantity}</span>
+                                  </div>
                                 ))}
-                              </ul>
-                              <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
-                                <span className="text-xs font-bold text-gray-400 uppercase">Total</span>
-                                <span className="font-bold text-[#D4AF37] text-lg font-serif">Rs. {order.total}</span>
                               </div>
+                            </div>
+                            
+                            <div className="border-t border-gray-100 pt-2 flex justify-between items-center mt-auto">
+                              <span className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total</span>
+                              <span className="text-xs md:text-sm font-black text-[#111827] font-serif">Rs.{order.total}</span>
                             </div>
                           </div>
 
-                          <div className="p-3 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
+                          <div className="p-2 bg-gray-50 border-t border-gray-100 flex justify-end gap-2">
                             {order.status === 'New' && (
-                              <button disabled={updatingOrderId === order.id} onClick={() => handleUpdateOrderStatus(order.id, 'Preparing')} className={`bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-2 shadow-md ${updatingOrderId === order.id ? 'opacity-70 cursor-not-allowed' : ''}`}>
-                                {updatingOrderId === order.id ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CookingPot size={14}/>}
-                                Start Preparing
+                              <button disabled={updatingOrderId === order.id} onClick={() => handleUpdateOrderStatus(order.id, 'Preparing')} className={`bg-orange-500 hover:bg-orange-600 text-white px-2 md:px-3 py-1.5 rounded-md text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition flex items-center gap-1 w-full justify-center ${updatingOrderId === order.id ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                                {updatingOrderId === order.id ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CookingPot size={12}/>}
+                                Start
                               </button>
                             )}
                             {order.status === 'Preparing' && (
-                              <button disabled={updatingOrderId === order.id} onClick={() => handleUpdateOrderStatus(order.id, 'Delivered')} className={`bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition flex items-center gap-2 shadow-md ${updatingOrderId === order.id ? 'opacity-70 cursor-not-allowed' : ''}`}>
-                                {updatingOrderId === order.id ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CheckCircle2 size={14}/>}
-                                Mark Delivered
+                              <button disabled={updatingOrderId === order.id} onClick={() => handleUpdateOrderStatus(order.id, 'Delivered')} className={`bg-green-500 hover:bg-green-600 text-white px-2 md:px-3 py-1.5 rounded-md text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition flex items-center gap-1 w-full justify-center ${updatingOrderId === order.id ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                                {updatingOrderId === order.id ? <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CheckCircle2 size={12}/>}
+                                Delivered
                               </button>
                             )}
                           </div>
