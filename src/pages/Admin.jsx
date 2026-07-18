@@ -468,21 +468,22 @@ export default function Admin() {
 
           {/* SECTION: MENU MANAGEMENT */}
           {adminSection === 'menu' && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <div className="flex justify-between items-center mb-8">
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
                 <div>
-                  <h3 className="text-2xl font-black font-serif text-[#111827]">Restaurant Menu</h3>
-                  <p className="text-gray-500 text-sm mt-1">Changes made here instantly update the live website.</p>
+                  <h3 className="text-xl md:text-2xl font-black font-serif text-[#111827]">Restaurant Menu</h3>
+                  <p className="text-gray-500 text-[10px] md:text-sm mt-1">Changes made here instantly update the live website.</p>
                 </div>
                 <button 
                   onClick={openAddModal}
-                  className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-sm transition flex items-center gap-2 shadow-lg"
+                  className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg w-full md:w-auto justify-center"
                 >
-                  <Plus size={18} /> Add New Dish
+                  <Plus size={16} /> Add New Dish
                 </button>
               </div>
 
-              <div className="overflow-x-auto">
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b-2 border-gray-100 text-xs font-bold text-gray-400 uppercase tracking-widest">
@@ -516,6 +517,28 @@ export default function Admin() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-3">
+                {menuItems.map(item => (
+                  <div key={item.id} className="border border-gray-100 rounded-lg p-3 flex items-center gap-3 bg-gray-50">
+                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg shadow-sm flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bold text-xs text-[#111827] truncate">{item.name}</h4>
+                      <p className="text-[9px] text-gray-500 truncate mt-0.5">{item.category}</p>
+                      <p className="font-black text-[#D4AF37] text-sm mt-1">Rs. {item.price}</p>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <button onClick={() => openEditModal(item)} className="bg-blue-100 text-blue-600 p-1.5 rounded-md">
+                        <Edit2 size={14} />
+                      </button>
+                      <button onClick={() => handleDelete(item)} className="bg-red-100 text-red-600 p-1.5 rounded-md">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
