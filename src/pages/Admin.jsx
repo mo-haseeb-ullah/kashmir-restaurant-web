@@ -321,22 +321,22 @@ export default function Admin() {
         </header>
 
         {/* Mobile Top Navigation */}
-        <div className="md:hidden bg-[#111827] flex justify-around p-2 shadow-md">
-          <button onClick={() => setAdminSection('orders')} className={`flex flex-col items-center p-2 rounded-lg ${adminSection === 'orders' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
-            <LayoutDashboard size={18} />
-            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Orders</span>
+        <div className="md:hidden bg-[#111827] grid grid-cols-4 p-2 shadow-md gap-1">
+          <button onClick={() => setAdminSection('orders')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'orders' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
+            <LayoutDashboard size={16} />
+            <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Orders</span>
           </button>
-          <button onClick={() => setAdminSection('menu')} className={`flex flex-col items-center p-2 rounded-lg ${adminSection === 'menu' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
-            <UtensilsCrossed size={18} />
-            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Menu</span>
+          <button onClick={() => setAdminSection('menu')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'menu' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
+            <UtensilsCrossed size={16} />
+            <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Menu</span>
           </button>
-          <button onClick={() => setAdminSection('settings')} className={`flex flex-col items-center p-2 rounded-lg ${adminSection === 'settings' ? 'text-[#D4AF37]' : 'text-gray-400'}`}>
-            <Settings size={18} />
-            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Settings</span>
+          <button onClick={() => setAdminSection('settings')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'settings' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
+            <Settings size={16} />
+            <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Settings</span>
           </button>
-          <button onClick={() => setIsLoggedIn(false)} className="flex flex-col items-center p-2 rounded-lg text-red-400 hover:text-red-500">
-            <LogOut size={18} />
-            <span className="text-[9px] mt-1 uppercase tracking-widest font-bold">Logout</span>
+          <button onClick={() => setIsLoggedIn(false)} className="flex flex-col items-center justify-center p-2 rounded-lg text-red-400 hover:bg-red-500/10">
+            <LogOut size={16} />
+            <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Logout</span>
           </button>
         </div>
 
@@ -520,22 +520,23 @@ export default function Admin() {
               </div>
 
               {/* Mobile Card View */}
-              <div className="md:hidden space-y-3">
+              <div className="md:hidden grid grid-cols-2 gap-2">
                 {menuItems.map(item => (
-                  <div key={item.id} className="border border-gray-100 rounded-lg p-3 flex items-center gap-3 bg-gray-50">
-                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-lg shadow-sm flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-xs text-[#111827] truncate">{item.name}</h4>
-                      <p className="text-[9px] text-gray-500 truncate mt-0.5">{item.category}</p>
-                      <p className="font-black text-[#D4AF37] text-sm mt-1">Rs. {item.price}</p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <button onClick={() => openEditModal(item)} className="bg-blue-100 text-blue-600 p-1.5 rounded-md">
-                        <Edit2 size={14} />
-                      </button>
-                      <button onClick={() => handleDelete(item)} className="bg-red-100 text-red-600 p-1.5 rounded-md">
-                        <Trash2 size={14} />
-                      </button>
+                  <div key={item.id} className="border border-gray-100 rounded-lg bg-gray-50 overflow-hidden flex flex-col shadow-sm">
+                    <img src={item.image} alt={item.name} className="w-full h-24 object-cover shrink-0" />
+                    <div className="p-2 flex-1 flex flex-col">
+                      <h4 className="font-bold text-[10px] text-[#111827] leading-tight line-clamp-2 min-h-[28px]">{item.name}</h4>
+                      <p className="text-[8px] text-gray-500 truncate mt-1 uppercase tracking-wider">{item.category}</p>
+                      <p className="font-black text-[#D4AF37] text-xs mt-1">Rs. {item.price}</p>
+                      
+                      <div className="flex gap-1 mt-3 pt-2 border-t border-gray-200">
+                        <button onClick={() => openEditModal(item)} className="flex-1 flex justify-center bg-blue-100 text-blue-600 p-1.5 rounded-md hover:bg-blue-200 transition">
+                          <Edit2 size={12} />
+                        </button>
+                        <button onClick={() => handleDelete(item)} className="flex-1 flex justify-center bg-red-100 text-red-600 p-1.5 rounded-md hover:bg-red-200 transition">
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
