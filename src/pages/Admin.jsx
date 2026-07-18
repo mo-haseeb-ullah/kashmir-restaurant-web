@@ -340,13 +340,13 @@ export default function Admin() {
           </button>
         </div>
 
-        <div className="p-3 md:p-8">
+        <div className="p-0 md:p-8 bg-gray-50 md:bg-transparent min-h-screen md:min-h-0">
           
           {/* SECTION: LIVE ORDERS */}
           {adminSection === 'orders' && (
             <>
               {/* Dashboard Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-8 px-3 md:px-0 mt-3 md:mt-0">
                 <div className="bg-white p-3 md:p-6 rounded-xl md:rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                   <div>
                     <p className="text-[9px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Orders</p>
@@ -377,7 +377,7 @@ export default function Admin() {
               </div>
 
               {/* Orders Kanban/List */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-white rounded-none md:rounded-2xl shadow-sm md:shadow-sm border-y md:border border-gray-100 overflow-hidden">
                 <div className="flex border-b border-gray-100 overflow-x-auto hide-scrollbar">
                   {['New', 'Preparing', 'Delivered'].map(tab => (
                     <button 
@@ -468,7 +468,7 @@ export default function Admin() {
 
           {/* SECTION: MENU MANAGEMENT */}
           {adminSection === 'menu' && (
-            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8">
+            <div className="bg-white rounded-none md:rounded-2xl shadow-sm md:shadow-sm border-y md:border border-gray-100 p-4 md:p-8">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
                 <div>
                   <h3 className="text-xl md:text-2xl font-black font-serif text-[#111827]">Restaurant Menu</h3>
