@@ -186,7 +186,7 @@ export default function Home() {
                     Years ago, Kashmir Restaurant started with a simple goal: to serve the most authentic, flavorful Desi food on the Sakesar Road. What began as a humble roadside stop quickly became a famous destination for travelers and locals alike.
                   </p>
                   <p className="text-gray-500 leading-relaxed text-lg" dir="rtl">
-                    برسوں پہلے، کشمیر ریسٹورنٹ کا آغاز ایک سادہ سے مقصد کے ساتھ ہوا: سکیسر روڈ پر سب سے مستند اور ذائقہ دار دیسی کھانا پیش کرنا۔ جو ایک عام سے روڈ سائیڈ اسٹاپ کے طور پر شروع ہوا، وہ جلد ہی مسافروں اور مقامی لوگوں کے لیے ایک مشہور مقام بن گیا۔
+                    برسوں پہلے، کشمیر ریسٹورنٹ کا آغاز ایک سادہ سے مقصد کے ساتھ ہوا: سکیسر روڈ پر سب سے خالص اور ذائقہ دار دیسی کھانا پیش کرنا۔ جو ایک عام سے روڈ سائیڈ اسٹاپ کے طور پر شروع ہوا، وہ جلد ہی مسافروں اور مقامی لوگوں کے لیے ایک مشہور مقام بن گیا۔
                   </p>
                 </div>
                 
