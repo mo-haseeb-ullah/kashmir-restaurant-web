@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin, Settings, LogOut } from 'lucide-react';
+import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin, Settings, LogOut, FileText, Download } from 'lucide-react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem, getAdminPasswordHash, hashPassword, updateAdminPasswordHash } from '../services/db';
 import { Link } from 'react-router-dom';
 
@@ -21,6 +23,9 @@ export default function Admin() {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [menuForm, setMenuForm] = useState({ name: '', category: '', price: '', image: '', desc: '' });
+  
+  // Reports State
+  const [reportTimeframe, setReportTimeframe] = useState('Today');
   
   // Toast State
   const [toastMessage, setToastMessage] = useState(null);
@@ -143,6 +148,67 @@ export default function Admin() {
     } finally {
       setIsSavingMenu(false);
     }
+  };
+
+  const generatePDFReport = () => {
+    let filteredForReport = orders;
+    const now = new Date();
+    
+    if (reportTimeframe === 'Today') {
+      filteredForReport = orders.filter(o => new Date(o.timestamp).toDateString() === now.toDateString());
+    } else if (reportTimeframe === 'Last 7 Days') {
+      const sevenDaysAgo = new Date(now.setDate(now.getDate() - 7));
+      filteredForReport = orders.filter(o => new Date(o.timestamp) >= sevenDaysAgo);
+    } else if (reportTimeframe === 'This Month') {
+      filteredForReport = orders.filter(o => {
+        const orderDate = new Date(o.timestamp);
+        return orderDate.getMonth() === new Date().getMonth() && orderDate.getFullYear() === new Date().getFullYear();
+      });
+    }
+
+    const totalRevenue = filteredForReport.reduce((sum, order) => sum + order.total, 0);
+
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(20);
+    doc.text("Kashmir Restaurant - Sales Report", 14, 22);
+    doc.setFontSize(11);
+    doc.text(`Timeframe: ${reportTimeframe}`, 14, 30);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 36);
+    
+    // Summary
+    doc.setFontSize(14);
+    doc.text(`Total Orders: ${filteredForReport.length}`, 14, 48);
+    doc.text(`Total Revenue: Rs. ${totalRevenue.toLocaleString()}`, 14, 56);
+
+    // Table
+    const tableColumn = ["Order ID", "Date", "Customer", "Type", "Status", "Amount"];
+    const tableRows = [];
+
+    filteredForReport.forEach(order => {
+      const orderData = [
+        `#${order.orderId || order.id.substring(0,6)}`,
+        new Date(order.timestamp).toLocaleDateString(),
+        order.customer?.name || "N/A",
+        order.orderType || "N/A",
+        order.status,
+        `Rs. ${order.total}`
+      ];
+      tableRows.push(orderData);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 65,
+      theme: 'grid',
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [212, 175, 55], textColor: [17, 24, 39] }
+    });
+
+    doc.save(`Kashmir_Sales_Report_${reportTimeframe.replace(/ /g, '_')}.pdf`);
+    showToast("Report Generated Successfully!");
   };
 
   const handlePasswordChange = async (e) => {
@@ -293,6 +359,12 @@ export default function Admin() {
             <UtensilsCrossed size={18} /> Menu Management
           </button>
           <button 
+            onClick={() => setAdminSection('reports')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold tracking-widest uppercase text-xs ${adminSection === 'reports' ? 'bg-[#D4AF37] text-[#111827]' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
+          >
+            <FileText size={18} /> Reports
+          </button>
+          <button 
             onClick={() => setAdminSection('settings')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-bold tracking-widest uppercase text-xs ${adminSection === 'settings' ? 'bg-[#D4AF37] text-[#111827]' : 'text-gray-400 hover:bg-gray-800 hover:text-white'}`}
           >
@@ -313,7 +385,7 @@ export default function Admin() {
         {/* Top Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10 px-4 md:px-8 py-3 md:py-4 flex justify-between items-center">
           <h2 className="text-lg md:text-2xl font-black font-serif text-[#111827] truncate pr-2">
-            {adminSection === 'orders' ? 'Live Orders' : adminSection === 'menu' ? 'Menu CMS' : 'Settings'}
+            {adminSection === 'orders' ? 'Live Orders' : adminSection === 'menu' ? 'Menu CMS' : adminSection === 'reports' ? 'Sales Reports' : 'Settings'}
           </h2>
           <Link to="/" target="_blank" className="text-[10px] md:text-sm font-bold text-gray-500 hover:text-[#D4AF37] transition flex items-center gap-1 border border-gray-200 px-2 md:px-4 py-1.5 md:py-2 rounded-lg whitespace-nowrap">
             View Site <ChevronRight size={14}/>
@@ -321,7 +393,7 @@ export default function Admin() {
         </header>
 
         {/* Mobile Top Navigation */}
-        <div className="md:hidden bg-[#111827] grid grid-cols-4 p-2 shadow-md gap-1">
+        <div className="md:hidden bg-[#111827] grid grid-cols-5 p-2 shadow-md gap-1">
           <button onClick={() => setAdminSection('orders')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'orders' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
             <LayoutDashboard size={16} />
             <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Orders</span>
@@ -329,6 +401,10 @@ export default function Admin() {
           <button onClick={() => setAdminSection('menu')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'menu' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
             <UtensilsCrossed size={16} />
             <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Menu</span>
+          </button>
+          <button onClick={() => setAdminSection('reports')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'reports' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
+            <FileText size={16} />
+            <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Reports</span>
           </button>
           <button onClick={() => setAdminSection('settings')} className={`flex flex-col items-center justify-center p-2 rounded-lg ${adminSection === 'settings' ? 'text-[#D4AF37] bg-white/5' : 'text-gray-400 hover:bg-white/5'}`}>
             <Settings size={16} />
@@ -540,6 +616,68 @@ export default function Admin() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* SECTION: REPORTS */}
+          {adminSection === 'reports' && (
+            <div className="max-w-4xl mx-auto bg-white rounded-none md:rounded-2xl shadow-sm md:shadow-sm border-y md:border border-gray-100 p-4 md:p-8">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+                <div>
+                  <h3 className="text-xl md:text-2xl font-black font-serif text-[#111827]">Sales Reports</h3>
+                  <p className="text-gray-500 text-[10px] md:text-sm mt-1">Generate professional PDF sales reports for your business.</p>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-200">
+                <div className="mb-6">
+                  <label className="block text-xs font-bold text-gray-600 uppercase tracking-widest mb-2">Select Timeframe</label>
+                  <select 
+                    value={reportTimeframe}
+                    onChange={(e) => setReportTimeframe(e.target.value)}
+                    className="w-full md:w-1/2 border-2 border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#D4AF37] outline-none font-bold text-[#111827] transition"
+                  >
+                    <option value="Today">Today</option>
+                    <option value="Last 7 Days">Last 7 Days</option>
+                    <option value="This Month">This Month</option>
+                    <option value="All Time">All Time</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                    <p className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Orders</p>
+                    <h3 className="text-xl md:text-3xl font-black text-[#111827] font-serif">
+                      {
+                        (reportTimeframe === 'Today' ? orders.filter(o => new Date(o.timestamp).toDateString() === new Date().toDateString()) :
+                        reportTimeframe === 'Last 7 Days' ? orders.filter(o => new Date(o.timestamp) >= new Date(new Date().setDate(new Date().getDate() - 7))) :
+                        reportTimeframe === 'This Month' ? orders.filter(o => {
+                          const d = new Date(o.timestamp); const n = new Date(); return d.getMonth()===n.getMonth() && d.getFullYear()===n.getFullYear();
+                        }) : orders).length
+                      }
+                    </h3>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 text-center">
+                    <p className="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Revenue</p>
+                    <h3 className="text-xl md:text-3xl font-black text-[#D4AF37] font-serif">
+                      Rs. {
+                        (reportTimeframe === 'Today' ? orders.filter(o => new Date(o.timestamp).toDateString() === new Date().toDateString()) :
+                        reportTimeframe === 'Last 7 Days' ? orders.filter(o => new Date(o.timestamp) >= new Date(new Date().setDate(new Date().getDate() - 7))) :
+                        reportTimeframe === 'This Month' ? orders.filter(o => {
+                          const d = new Date(o.timestamp); const n = new Date(); return d.getMonth()===n.getMonth() && d.getFullYear()===n.getFullYear();
+                        }) : orders).reduce((sum, order) => sum + order.total, 0).toLocaleString()
+                      }
+                    </h3>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={generatePDFReport}
+                  className="w-full bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-3 md:py-4 rounded-xl font-black uppercase tracking-[0.1em] md:tracking-[0.2em] transition flex items-center justify-center gap-3 shadow-xl text-[10px] md:text-sm"
+                >
+                  <Download size={18} /> Generate PDF Report
+                </button>
               </div>
             </div>
           )}
