@@ -1,7 +1,11 @@
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 export default function FloatingWhatsApp() {
+  const location = useLocation();
+  if (location.pathname === '/admin') return null;
+
   const phoneNumber = "923005400476";
   const message = "Hello Kashmir Restaurant! I have a question about my order.";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

@@ -6,7 +6,13 @@ import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMen
 import { Link } from 'react-router-dom';
 
 export default function Admin() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const session = localStorage.getItem('adminSession');
+    if (session && (Date.now() - parseInt(session)) < 3600000) {
+      return true; // Valid for 1 hour
+    }
+    return false;
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -96,6 +102,7 @@ export default function Admin() {
       
       if (inputHash === adminPasswordHash) {
         setIsLoggedIn(true);
+        localStorage.setItem('adminSession', Date.now().toString());
       } else {
         setLoginError('Incorrect password! Access denied.');
       }
@@ -373,7 +380,7 @@ export default function Admin() {
         </nav>
 
         <div className="p-4 border-t border-gray-800">
-          <button onClick={() => setIsLoggedIn(false)} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gray-800 hover:bg-red-600 text-white transition font-bold tracking-widest uppercase text-xs">
+          <button onClick={() => { setIsLoggedIn(false); localStorage.removeItem('adminSession'); }} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gray-800 hover:bg-red-600 text-white transition font-bold tracking-widest uppercase text-xs">
             Logout
           </button>
         </div>
@@ -410,7 +417,7 @@ export default function Admin() {
             <Settings size={16} />
             <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Settings</span>
           </button>
-          <button onClick={() => setIsLoggedIn(false)} className="flex flex-col items-center justify-center p-2 rounded-lg text-red-400 hover:bg-red-500/10">
+          <button onClick={() => { setIsLoggedIn(false); localStorage.removeItem('adminSession'); }} className="flex flex-col items-center justify-center p-2 rounded-lg text-red-400 hover:bg-red-500/10">
             <LogOut size={16} />
             <span className="text-[8px] mt-1 uppercase tracking-widest font-bold">Logout</span>
           </button>
