@@ -636,7 +636,7 @@ export default function Admin() {
                   <select 
                     value={reportTimeframe}
                     onChange={(e) => setReportTimeframe(e.target.value)}
-                    className="w-full md:w-1/2 border-2 border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#D4AF37] outline-none font-bold text-[#111827] transition"
+                    className="w-full md:w-1/2 border-2 border-gray-200 rounded-xl px-4 py-3 bg-white focus:border-[#D4AF37] outline-none font-bold text-[#111827] transition text-sm max-w-full"
                   >
                     <option value="Today">Today</option>
                     <option value="Last 7 Days">Last 7 Days</option>
