@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin, Settings, LogOut, FileText, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem, getAdminPasswordHash, hashPassword, updateAdminPasswordHash } from '../services/db';
 import { Link } from 'react-router-dom';
 
@@ -198,7 +198,7 @@ export default function Admin() {
       tableRows.push(orderData);
     });
 
-    doc.autoTable({
+    autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
       startY: 65,
