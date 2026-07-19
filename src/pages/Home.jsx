@@ -149,7 +149,7 @@ export default function Home() {
         <div className="relative z-10 text-center px-4 max-w-4xl mt-12 md:mt-0">
           <h2 className="text-luxury-gold text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
           <h1 className="text-5xl sm:text-7xl font-black text-luxury-text mb-6 leading-tight font-serif" dir="rtl">
-            مستند <span className="text-luxury-red">دیسی</span> پکوان
+            لاجواب <span className="text-luxury-red">دیسی</span> پکوان
           </h1>
           <p className="text-gray-300 text-lg sm:text-2xl mb-10 font-light" dir="rtl">
             خوشاب کی بہترین کڑاہی، ہانڈی، اور ناشتے کے پکوان کی شاندار پیشکش۔
