@@ -42,10 +42,25 @@ export default function Home() {
     return () => unsubscribe();
   }, []);
 
-  const dynamicCategories = ['All', ...new Set(menuItems.map(item => item.category))];
+  const uniqueCategories = [];
+  const seenCategories = new Set();
+  
+  menuItems.forEach(item => {
+    const rawCat = item.category || '';
+    const normalized = rawCat.trim().toLowerCase();
+    if (normalized !== '' && !seenCategories.has(normalized)) {
+      seenCategories.add(normalized);
+      uniqueCategories.push(rawCat.trim()); // Keep original casing of first found
+    }
+  });
+  
+  const dynamicCategories = ['All', ...uniqueCategories];
 
   const filteredMenu = menuItems.filter(item => {
-    const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
+    const itemCatNormalized = (item.category || '').trim().toLowerCase();
+    const activeCatNormalized = activeCategory.trim().toLowerCase();
+    
+    const matchesCategory = activeCategory === 'All' || itemCatNormalized === activeCatNormalized;
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           item.desc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -249,10 +264,10 @@ export default function Home() {
         <div className="w-full px-2">
           <h2 className="text-[#111827] text-center font-serif text-2xl font-bold mb-6">Our Deals</h2>
           
-          {/* We use Flexbox to guarantee 2 boxes per row on mobile to fix layout bugs */}
-          <div className="flex flex-wrap max-w-7xl mx-auto px-1">
+          {/* We use Flexbox to guarantee 2 boxes per row on mobile, up to 5 on desktop */}
+          <div className="flex flex-wrap max-w-[1400px] mx-auto px-1">
             {filteredMenu.map(item => (
-              <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 p-2">
+              <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2">
                 <div 
                   className="bg-white group h-full border border-gray-200 shadow-sm rounded-xl transition-all relative overflow-hidden flex flex-col"
                 >
