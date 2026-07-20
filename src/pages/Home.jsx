@@ -6,13 +6,6 @@ import SEO from '../components/SEO';
 import { useCart } from '../context/CartContext';
 import { listenToMenu } from '../services/db';
 
-const STANDARD_ADDONS = [
-  { id: 'add-1', name: 'Khameeri Roti', price: 65, image: 'https://images.unsplash.com/photo-1626082895617-2c6afda2c046?w=100&q=80' },
-  { id: 'add-2', name: 'Roghni Naan', price: 95, image: 'https://images.unsplash.com/photo-1626082895617-2c6afda2c046?w=100&q=80' },
-  { id: 'add-3', name: 'Sada Naan', price: 65, image: 'https://images.unsplash.com/photo-1626082895617-2c6afda2c046?w=100&q=80' },
-  { id: 'add-4', name: 'Pudina Raita', price: 175, image: 'https://images.unsplash.com/photo-1626201314643-d9d1502dc87e?w=100&q=80' },
-  { id: 'add-5', name: 'Fresh Salad', price: 275, image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=100&q=80' },
-];
 
 export default function Home() {
   const { addToCart, setIsCartOpen } = useCart();
@@ -56,6 +49,18 @@ export default function Home() {
   });
   
   const dynamicCategories = ['All', ...uniqueCategories];
+
+  const dynamicAddons = menuItems.filter(item => {
+    if (variantModalItem && item.id === variantModalItem.id) return false;
+    const n = item.name.toLowerCase();
+    const c = (item.category || '').toLowerCase();
+    return (
+      n.includes('roti') || n.includes('naan') || 
+      n.includes('raita') || n.includes('salad') || 
+      n.includes('drink') || n.includes('water') ||
+      c.includes('tandoor') || c.includes('side') || c.includes('other')
+    );
+  }).slice(0, 10);
 
   const filteredMenu = menuItems.filter(item => {
     const itemCatNormalized = (item.category || '').trim().toLowerCase();
@@ -456,42 +461,44 @@ export default function Home() {
                 )}
 
                 {/* Frequently Bought Together */}
-                <div className="bg-white">
-                  <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                    <div>
-                      <h4 className="font-bold text-[#111827] text-lg">Frequently bought together</h4>
-                      <p className="text-xs text-gray-500">Other customers also ordered these</p>
+                  <div className="bg-white">
+                    <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                      <div>
+                        <h4 className="font-bold text-[#111827] text-lg">Frequently bought together</h4>
+                        <p className="text-xs text-gray-500">Other customers also ordered these</p>
+                      </div>
+                      <span className="bg-gray-200 text-gray-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Optional</span>
                     </div>
-                    <span className="bg-gray-200 text-gray-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Optional</span>
-                  </div>
-                  <div className="px-4">
-                    {STANDARD_ADDONS.map((addon) => {
-                      const isSelected = selectedAddons.find(a => a.id === addon.id);
-                      return (
-                        <div 
-                          key={addon.id} 
-                          onClick={() => {
-                            if (isSelected) {
-                              setSelectedAddons(prev => prev.filter(a => a.id !== addon.id));
-                            } else {
-                              setSelectedAddons(prev => [...prev, addon]);
-                            }
-                          }}
-                          className="flex items-center py-4 border-b border-gray-100 last:border-0 cursor-pointer"
-                        >
-                          <img src={addon.image} alt={addon.name} className="w-12 h-12 object-cover rounded-lg border border-gray-200 shrink-0" />
-                          <span className="font-bold text-gray-700 ml-3 flex-grow">{addon.name}</span>
-                          <div className="flex items-center gap-3 shrink-0">
-                            <span className="text-sm text-gray-600">+Rs. {addon.price}.00</span>
-                            <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${isSelected ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-300'}`}>
-                              {isSelected && <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                    <div className="px-4">
+                      {dynamicAddons.length > 0 ? dynamicAddons.map((addon) => {
+                        const isSelected = selectedAddons.find(a => a.id === addon.id);
+                        return (
+                          <div 
+                            key={addon.id} 
+                            onClick={() => {
+                              if (isSelected) {
+                                setSelectedAddons(prev => prev.filter(a => a.id !== addon.id));
+                              } else {
+                                setSelectedAddons(prev => [...prev, addon]);
+                              }
+                            }}
+                            className="flex items-center py-4 border-b border-gray-100 last:border-0 cursor-pointer"
+                          >
+                            <img src={addon.image} alt={addon.name} className="w-12 h-12 object-cover rounded-lg border border-gray-200 shrink-0" />
+                            <span className="font-bold text-gray-700 ml-3 flex-grow">{addon.name}</span>
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="text-sm text-gray-600">+Rs. {addon.price}</span>
+                              <div className={`w-6 h-6 rounded border-2 flex items-center justify-center ${isSelected ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-300'}`}>
+                                {isSelected && <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      }) : (
+                        <p className="text-sm text-gray-400 py-4 italic">No side items available right now.</p>
+                      )}
+                    </div>
                   </div>
-                </div>
 
               </div>
 
