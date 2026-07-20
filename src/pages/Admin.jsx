@@ -28,7 +28,7 @@ export default function Admin() {
   // Edit/Add Modal State
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
-  const [menuForm, setMenuForm] = useState({ name: '', category: '', price: '', image: '', desc: '' });
+  const [menuForm, setMenuForm] = useState({ name: '', category: '', price: '', image: '', desc: '', variants: [] });
   
   // Reports State
   const [reportTimeframe, setReportTimeframe] = useState('Today');
@@ -116,13 +116,13 @@ export default function Admin() {
 
   const openAddModal = () => {
     setEditingItem(null);
-    setMenuForm({ name: '', category: '', price: '', image: '', desc: '' });
+    setMenuForm({ name: '', category: '', price: '', image: '', desc: '', variants: [] });
     setIsMenuModalOpen(true);
   };
 
   const openEditModal = (item) => {
     setEditingItem(item);
-    setMenuForm({ name: item.name, category: item.category, price: item.price, image: item.image, desc: item.desc });
+    setMenuForm({ name: item.name, category: item.category, price: item.price, image: item.image, desc: item.desc, variants: item.variants || [] });
     setIsMenuModalOpen(true);
   };
 
@@ -841,6 +841,69 @@ export default function Admin() {
                       className="w-full border-2 border-gray-100 rounded-xl px-4 py-3 bg-gray-50 focus:bg-white focus:border-[#D4AF37] focus:ring-0 outline-none transition resize-none font-medium text-gray-700" 
                       placeholder="Describe the dish, ingredients, and taste..."
                     ></textarea>
+                  </div>
+                  
+                  {/* Variants Management */}
+                  <div className="border-t border-gray-100 pt-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <label className="block text-xs font-bold text-gray-600 uppercase tracking-widest">Variants (Optional)</label>
+                      <button 
+                        type="button" 
+                        onClick={() => setMenuForm({...menuForm, variants: [...(menuForm.variants || []), { label: '', price: '' }]})}
+                        className="bg-gray-100 hover:bg-gray-200 text-[#111827] px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1"
+                      >
+                        <Plus size={14} /> Add Variant
+                      </button>
+                    </div>
+                    
+                    {menuForm.variants && menuForm.variants.length > 0 ? (
+                      <div className="space-y-3">
+                        {menuForm.variants.map((variant, idx) => (
+                          <div key={idx} className="flex gap-3 items-center bg-gray-50 p-3 rounded-xl border border-gray-100">
+                            <div className="flex-1">
+                              <input 
+                                required type="text" 
+                                value={variant.label} 
+                                onChange={e => {
+                                  const newVariants = [...menuForm.variants];
+                                  newVariants[idx].label = e.target.value;
+                                  setMenuForm({...menuForm, variants: newVariants});
+                                }} 
+                                className="w-full border-2 border-gray-100 rounded-lg px-3 py-2 bg-white focus:border-[#D4AF37] outline-none text-sm font-bold" 
+                                placeholder="Name (e.g. Half Kg)" 
+                              />
+                            </div>
+                            <div className="flex-1 relative">
+                              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-bold text-xs">Rs.</span>
+                              <input 
+                                required type="number" 
+                                value={variant.price || ''} 
+                                onChange={e => {
+                                  const newVariants = [...menuForm.variants];
+                                  newVariants[idx].price = e.target.value;
+                                  newVariants[idx].priceMultiplier = undefined; // Clear old multiplier if they edit it
+                                  setMenuForm({...menuForm, variants: newVariants});
+                                }} 
+                                className="w-full border-2 border-gray-100 rounded-lg pl-9 pr-3 py-2 bg-white focus:border-[#D4AF37] outline-none text-sm font-bold" 
+                                placeholder="Price" 
+                              />
+                            </div>
+                            <button 
+                              type="button" 
+                              onClick={() => {
+                                const newVariants = menuForm.variants.filter((_, i) => i !== idx);
+                                setMenuForm({...menuForm, variants: newVariants});
+                              }}
+                              className="text-red-400 hover:text-red-600 bg-white p-2 rounded-lg border-2 border-gray-100 hover:border-red-200 transition shrink-0"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-400 italic">No variants added. The base price will be used.</p>
+                    )}
                   </div>
                   
                 </form>
