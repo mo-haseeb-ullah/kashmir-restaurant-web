@@ -67,37 +67,37 @@ export default function Home() {
     return matchesCategory && matchesSearch;
   });
 
-  const handleDirectAddToCart = (item) => {
+  const handleCardClick = (item) => {
+    setVariantModalItem(item);
     if (item.variants && item.variants.length > 0) {
-      setVariantModalItem(item);
       setSelectedVariant(item.variants[0]); // Default to first variant
-      setSelectedAddons([]); // Clear previous addons
-      setVariantQuantity(1); // Reset quantity
-      return;
+    } else {
+      setSelectedVariant(null);
     }
-    
-    addToCart({
-      ...item,
-      cartItemId: item.id.toString(), // Base item ID for grouping
-      quantity: 1
-    });
-    showToast(`Added ${item.name} to cart!`);
+    setSelectedAddons([]); // Clear previous addons
+    setVariantQuantity(1); // Reset quantity
   };
 
   const handleAddVariantToCart = () => {
-    if (!variantModalItem || !selectedVariant) return;
+    if (!variantModalItem) return;
     
-    // Calculate final price based on multiplier
-    const finalPrice = Math.round(parseInt(variantModalItem.price) * selectedVariant.priceMultiplier);
-    
-    // Add main item
-    addToCart({
-      ...variantModalItem,
-      id: `${variantModalItem.id}-${selectedVariant.label}`, 
-      name: `${variantModalItem.name} (${selectedVariant.label})`,
-      price: finalPrice.toString(),
-      quantity: variantQuantity
-    });
+    if (variantModalItem.variants && variantModalItem.variants.length > 0) {
+      if (!selectedVariant) return;
+      const finalPrice = selectedVariant.price ? parseInt(selectedVariant.price) : Math.round(parseInt(variantModalItem.price) * selectedVariant.priceMultiplier);
+      addToCart({
+        ...variantModalItem,
+        id: `${variantModalItem.id}-${selectedVariant.label}`, 
+        name: `${variantModalItem.name} (${selectedVariant.label})`,
+        price: finalPrice.toString(),
+        quantity: variantQuantity
+      });
+    } else {
+      addToCart({
+        ...variantModalItem,
+        cartItemId: variantModalItem.id.toString(),
+        quantity: variantQuantity
+      });
+    }
 
     // Add selected addons
     selectedAddons.forEach(addon => {
@@ -282,7 +282,8 @@ export default function Home() {
             {filteredMenu.map(item => (
               <div key={item.id} className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2">
                 <div 
-                  className="bg-white group h-full border border-gray-200 shadow-sm rounded-xl transition-all relative overflow-hidden flex flex-col"
+                  onClick={() => handleCardClick(item)}
+                  className="bg-white group h-full border border-gray-200 shadow-sm rounded-xl transition-all relative overflow-hidden flex flex-col cursor-pointer hover:border-[#D4AF37]"
                 >
                   {/* Image */}
                   <div className="w-full aspect-[4/3] bg-gray-100 overflow-hidden relative">
@@ -308,7 +309,7 @@ export default function Home() {
                   
                   {/* Circular Add Button */}
                   <button 
-                    onClick={(e) => { e.stopPropagation(); handleDirectAddToCart(item); }}
+                    onClick={(e) => { e.stopPropagation(); handleCardClick(item); }}
                     className="absolute bottom-3 right-3 bg-white border border-gray-200 rounded-full w-8 h-8 flex items-center justify-center shadow-sm hover:bg-gray-50 transition text-[#111827]"
                   >
                     <Plus size={16} strokeWidth={2.5} />
@@ -421,17 +422,18 @@ export default function Home() {
                 </div>
 
                 {/* Variations */}
-                <div className="bg-white mb-2">
-                  <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                    <div>
-                      <h4 className="font-bold text-[#111827] text-lg">Variation</h4>
-                      <p className="text-xs text-gray-500">Select 1</p>
+                {variantModalItem.variants && variantModalItem.variants.length > 0 && (
+                  <div className="bg-white mb-2">
+                    <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                      <div>
+                        <h4 className="font-bold text-[#111827] text-lg">Variation</h4>
+                        <p className="text-xs text-gray-500">Select 1</p>
+                      </div>
+                      <span className="bg-[#111827] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Required</span>
                     </div>
-                    <span className="bg-[#111827] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Required</span>
-                  </div>
-                  <div className="px-4">
+                    <div className="px-4">
                     {variantModalItem.variants.map((variant, idx) => {
-                      const variantPrice = Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
+                      const variantPrice = variant.price ? parseInt(variant.price) : Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
                       const isSelected = selectedVariant?.label === variant.label;
                       return (
                         <div 
@@ -449,8 +451,9 @@ export default function Home() {
                         </div>
                       );
                     })}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Frequently Bought Together */}
                 <div className="bg-white">
