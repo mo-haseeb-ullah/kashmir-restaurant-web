@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-export default function SEO({ title, description, keywords }) {
+export default function SEO({ title, description, keywords, preloadImage }) {
   const siteTitle = 'Kashmir Restaurant';
   const fullTitle = title ? `${title} | ${siteTitle}` : `${siteTitle} | Authentic Desi Taste`;
   
@@ -10,6 +10,7 @@ export default function SEO({ title, description, keywords }) {
       <title>{fullTitle}</title>
       {description && <meta name="description" content={description} />}
       {keywords && <meta name="keywords" content={keywords} />}
+      {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
       
       {/* OpenGraph updates for the specific page */}
       <meta property="og:title" content={fullTitle} />

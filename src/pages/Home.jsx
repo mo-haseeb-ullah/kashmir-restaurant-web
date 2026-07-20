@@ -136,7 +136,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
-      <SEO title="Home" />
+      <SEO title="Home" preloadImage="/ChickenKarahi.webp" />
       <Navbar />
 
       {/* Toast Notification */}

@@ -18,7 +18,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
-      <SEO title="Contact" description="Get in touch with Kashmir Restaurant on Khushab - Sakesar Road. Call us or order via WhatsApp for delicious authentic desi food." />
+      <SEO title="Contact" description="Get in touch with Kashmir Restaurant on Khushab - Sakesar Road. Call us or order via WhatsApp for delicious authentic desi food." preloadImage="/pexels-photo-9738992.avif" />
       <Navbar />
 
       {/* Hero Section */}
