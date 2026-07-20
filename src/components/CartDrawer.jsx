@@ -6,7 +6,7 @@ import { addOrder } from '../services/db';
 
 export default function CartDrawer() {
   const { cartItems, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, cartTotal, clearCart, addToCart } = useCart();
-  const { user } = useAuth();
+  const { user, register, setIsAuthModalOpen } = useAuth();
   
   const [formData, setFormData] = useState({ name: '', phone: '', address: '' });
   const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -15,6 +15,9 @@ export default function CartDrawer() {
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [checkoutError, setCheckoutError] = useState('');
   const [orderType, setOrderType] = useState('Delivery');
+  
+  const [createAccount, setCreateAccount] = useState(false);
+  const [password, setPassword] = useState('');
   
   // Promo Code State
   const [promoCodeInput, setPromoCodeInput] = useState('');
@@ -74,9 +77,27 @@ export default function CartDrawer() {
       return;
     }
 
+    let finalUserId = user ? user.id : null;
+
+    if (!user && createAccount) {
+      if (!password || password.length < 6) {
+        setCheckoutError("Please provide a password of at least 6 characters.");
+        return;
+      }
+      try {
+        setIsSubmitting(true);
+        const newUser = await register(formData.name, formData.phone, password);
+        finalUserId = newUser.id;
+      } catch (err) {
+        setIsSubmitting(false);
+        setCheckoutError(err.message === 'Phone number already registered!' ? 'Phone number already registered! Please login instead.' : 'Failed to create account.');
+        return;
+      }
+    }
+
     const orderData = {
       orderType,
-      userId: user ? user.id : null,
+      userId: finalUserId,
       customer: formData,
       paymentMethod,
       items: cartItems,
@@ -292,7 +313,13 @@ export default function CartDrawer() {
                       {!user && (
                         <div className="bg-gray-800/50 border border-gray-700/50 p-4 rounded-xl mb-4 text-xs text-gray-300 flex justify-between items-center">
                           <span>Sign in for faster checkout!</span>
-                          <button type="button" onClick={() => setIsCartOpen(false)} className="text-[#D4AF37] font-bold tracking-wider uppercase">Login</button>
+                          <button 
+                            type="button" 
+                            onClick={() => { setIsCartOpen(false); setIsAuthModalOpen(true); }} 
+                            className="text-[#D4AF37] font-bold tracking-wider uppercase"
+                          >
+                            Login
+                          </button>
                         </div>
                       )}
 
@@ -327,6 +354,40 @@ export default function CartDrawer() {
                           />
                         </div>
                       </div>
+                      
+                      {!user && (
+                        <div className="pt-2">
+                          <label className="flex items-center gap-3 cursor-pointer group">
+                            <div className="relative flex items-center justify-center">
+                              <input 
+                                type="checkbox"
+                                checked={createAccount}
+                                onChange={(e) => setCreateAccount(e.target.checked)}
+                                className="peer appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-gray-800 checked:bg-[#D4AF37] checked:border-[#D4AF37] transition cursor-pointer"
+                              />
+                              <CheckCircle2 size={14} className="absolute text-[#111827] opacity-0 peer-checked:opacity-100 transition pointer-events-none" strokeWidth={4} />
+                            </div>
+                            <span className="text-sm font-bold text-gray-300 group-hover:text-white transition">Save my info for next time</span>
+                          </label>
+                          
+                          {createAccount && (
+                            <div className="mt-4 space-y-1 animate-[fadeIn_0.2s_ease-out]">
+                              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Create Password *</label>
+                              <div className="relative">
+                                <User size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#D4AF37]" />
+                                <input 
+                                  type="password" 
+                                  required={createAccount}
+                                  value={password}
+                                  onChange={e => setPassword(e.target.value)}
+                                  className="w-full bg-gray-800/80 border border-gray-700 rounded-xl pl-12 pr-4 py-3.5 focus:outline-none focus:border-[#D4AF37] text-sm text-white font-medium transition"
+                                  placeholder="Minimum 6 characters"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       
                       {orderType === 'Delivery' ? (
                         <div className="space-y-1">
