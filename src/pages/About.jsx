@@ -52,8 +52,8 @@ export default function About() {
           <div className="relative">
             <div className="absolute inset-0 bg-luxury-gold transform translate-x-4 translate-y-4 rounded-sm"></div>
             <img 
-              src="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=800&q=80" 
-              alt="Our Food" 
+              src="/ChickenKarahi.webp" 
+              alt="Chicken Karahi" 
               className="relative z-10 w-full h-auto rounded-sm shadow-xl"
             />
           </div>
