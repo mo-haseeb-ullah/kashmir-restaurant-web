@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { Phone, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
 
 export default function Contact() {
@@ -17,6 +18,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
+      <SEO title="Contact" description="Get in touch with Kashmir Restaurant on Khushab - Sakesar Road. Call us or order via WhatsApp for delicious authentic desi food." />
       <Navbar />
 
       {/* Hero Section */}

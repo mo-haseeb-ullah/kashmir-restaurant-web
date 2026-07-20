@@ -1,10 +1,12 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 
 export default function About() {
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
+      <SEO title="About Us" description="Learn about the history and legacy of Kashmir Restaurant in Khushab. Discover our commitment to authentic taste and traditional recipes." />
       <Navbar />
 
       {/* Hero Section */}

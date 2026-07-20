@@ -11,24 +11,28 @@ import Contact from './pages/Contact';
 import Profile from './pages/Profile';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 
+import { HelmetProvider } from 'react-helmet-async';
+
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <BrowserRouter>
-          <CartDrawer />
-          <AuthModal />
-          <FloatingWhatsApp />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
-        </BrowserRouter>
-      </CartProvider>
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <CartProvider>
+          <BrowserRouter>
+            <CartDrawer />
+            <AuthModal />
+            <FloatingWhatsApp />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </BrowserRouter>
+        </CartProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 

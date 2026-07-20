@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MessageCircle, ShoppingCart, Search as SearchIcon, X, Star, Utensils, ChefHat, Flame, Plus } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import { useCart } from '../context/CartContext';
 import { listenToMenu } from '../services/db';
 
@@ -130,6 +131,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F0] font-sans text-gray-800 flex flex-col">
+      <SEO title="Home" />
       <Navbar />
 
       {/* Toast Notification */}
