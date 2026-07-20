@@ -61,40 +61,25 @@ export default function Navbar() {
     { name: "Contact", path: "/contact" },
   ];
 
-  // If we are on the home page and not scrolled, the text should be white to be visible over the dark hero image.
-  // Otherwise, use the requested black/primary colors.
-  const isDarkBg = location.pathname === '/' && !isScrolled;
-  const textColorClass = isDarkBg ? "text-white" : "text-[#111827]";
+  // The navbar should always have a white background as requested.
+  const textColorClass = "text-[#111827]";
   const primaryColorClass = "#D4AF37"; // Kashmir Gold
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white border-b border-[#111827] py-4 shadow-sm"
-          : "bg-transparent py-0 mt-8"
-      }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 bg-white border-b border-[#111827] py-4 shadow-sm`}
     >
       <div className="max-w-[95%] mx-auto px-4 md:px-8 relative z-10">
-        <div className={`flex items-center justify-between ${isScrolled ? "" : "h-24"}`}>
+        <div className="flex items-center justify-between">
           
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 z-50">
-            {isScrolled ? (
-              <div className="flex items-center gap-2">
-                <ChefHat size={24} className="text-[#D4AF37]" />
-                <span className="font-serif text-xl tracking-widest text-[#111827] leading-none uppercase font-black">
-                  Kashmir Restaurant
-                </span>
-              </div>
-            ) : (
-              <div className="bg-[#111827] px-5 py-4 absolute -top-2 left-4 md:left-8 flex flex-col items-center shadow-[2px_2px_10px_rgba(0,0,0,0.5)] border border-gray-800">
-                <ChefHat size={28} className="text-[#D4AF37] mb-2" />
-                <span className="font-serif text-lg tracking-widest text-white leading-[1.2] uppercase text-center font-black">
-                  Kashmir <br /> Restaurant
-                </span>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              <ChefHat size={24} className="text-[#D4AF37]" />
+              <span className="font-serif text-xl tracking-widest text-[#111827] leading-none uppercase font-black">
+                Kashmir Restaurant
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

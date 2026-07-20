@@ -8,20 +8,15 @@ export default function About() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative min-h-[45vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-32 pb-12">
-        <img 
-          src="https://images.unsplash.com/photo-1544148103-0773bf10d330?w=1600&q=80" 
-          alt="Restaurant Ambiance" 
-          className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
-        />
+      <div className="relative h-[75vh] bg-white overflow-hidden flex items-center justify-center pt-32 pb-12 border-b border-gray-200">
         <div className="relative z-10 text-center px-4 max-w-3xl">
-          <h1 className="text-4xl sm:text-5xl font-black text-luxury-gold mb-1 uppercase tracking-widest font-serif">
+          <h1 className="text-4xl sm:text-5xl font-black text-[#D4AF37] mb-1 uppercase tracking-widest font-serif">
             About Us
           </h1>
-          <h2 className="text-2xl sm:text-3xl font-bold text-luxury-text mb-4 font-serif" dir="rtl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mb-4 font-serif" dir="rtl">
             ہمارے بارے میں
           </h2>
-          <div className="w-16 h-1 bg-luxury-red mx-auto"></div>
+          <div className="w-16 h-1 bg-red-600 mx-auto"></div>
         </div>
       </div>
 

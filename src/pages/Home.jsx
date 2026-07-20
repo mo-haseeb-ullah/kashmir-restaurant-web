@@ -140,24 +140,29 @@ export default function Home() {
       )}
 
       {/* Hero Section */}
-      <div className="relative min-h-[70vh] bg-luxury-bg overflow-hidden flex items-center justify-center pt-24 pb-12">
-        <img 
-          src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=80" 
-          alt="Premium Dining" 
-          className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
-        />
+      <div className="relative h-[75vh] bg-white overflow-hidden flex items-center justify-center pt-24 pb-12 border-b border-gray-200">
         <div className="relative z-10 text-center px-4 max-w-4xl mt-12 md:mt-0">
-          <h2 className="text-luxury-gold text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
-          <h1 className="text-5xl sm:text-7xl font-black text-luxury-text mb-6 leading-tight font-serif" dir="rtl">
-            لاجواب <span className="text-luxury-red">دیسی</span> پکوان
+          <h2 className="text-[#D4AF37] text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
+          <h1 className="text-5xl md:text-7xl font-serif text-[#111827] mb-6 leading-tight dir-rtl font-urdu">
+            لاجواب <span className="text-red-600">دیسی</span> پکوان
           </h1>
-          <p className="text-gray-300 text-lg sm:text-2xl mb-10 font-light" dir="rtl">
+          <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto font-light leading-relaxed dir-rtl font-urdu">
             خوشاب کی بہترین کڑاہی، ہانڈی، اور ناشتے کے پکوان کی شاندار پیشکش۔
           </p>
-          <a href="#menu" className="bg-luxury-red hover:bg-luxury-red/80 text-luxury-text px-8 py-4 rounded-sm font-bold text-lg inline-flex items-center gap-3 transition shadow-2xl uppercase tracking-widest">
-            <Utensils size={20} />
-            View Full Menu
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button 
+              onClick={() => {
+                const menuElement = document.getElementById('menu-section');
+                if (menuElement) {
+                  menuElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="bg-red-600 text-white px-8 py-4 rounded-none font-bold tracking-widest text-sm uppercase hover:bg-red-700 transition flex items-center gap-2 shadow-lg w-full sm:w-auto justify-center"
+            >
+              <Utensils size={18} />
+              View Full Menu
+            </button>
+          </div>
         </div>
       </div>
 
