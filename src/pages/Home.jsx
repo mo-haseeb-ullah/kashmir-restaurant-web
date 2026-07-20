@@ -431,7 +431,7 @@ export default function Home() {
                   </div>
                   <div className="px-4">
                     {variantModalItem.variants.map((variant, idx) => {
-                      const variantPrice = variant.price ? parseInt(variant.price) : Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
+                      const variantPrice = Math.round(parseInt(variantModalItem.price) * variant.priceMultiplier);
                       const isSelected = selectedVariant?.label === variant.label;
                       return (
                         <div 
