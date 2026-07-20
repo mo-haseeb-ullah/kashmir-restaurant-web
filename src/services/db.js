@@ -138,6 +138,14 @@ const SWEET_VARIANTS = [
   { label: 'Full (1 kg)', priceMultiplier: 1 }
 ];
 
+const DRINK_VARIANTS = [
+  { label: 'Regular', price: 70 },
+  { label: 'Half Liter', price: 90 },
+  { label: '1 Liter', price: 180 },
+  { label: '1.5 Liter', price: 220 },
+  { label: '2 Liter', price: 250 }
+];
+
 const defaultMenu = [
   { id: 1, name: "Mega Deal", category: "Mega Deals", price: "5500", image: "https://images.unsplash.com/photo-1555126634-ae2306716a49?w=600&q=80", desc: "1kg Chicken Karahi, 1kg Chicken Biryani, Half kg Beef Karahi, 2 Chicken Kebabs, 2 Reshmi Kebabs, 2 Tikka Boti, 2 Malai Boti, Roti for 6, 6 Raita, 2 Salad, 2.25ltr Drink." },
   { id: 2, name: "Chicken Chana (مرغ چنے)", category: "Breakfast (صبح کا ناشته)", price: "250", image: "https://images.unsplash.com/photo-1626786015525-4fc1da939768?w=600&q=80", desc: "Delicious Lahori style chicken chickpeas." },
@@ -150,7 +158,7 @@ const defaultMenu = [
   { id: 9, name: "Samosa (سموسے)", category: "Kashmir Sweet Corner", price: "50", image: "https://images.unsplash.com/photo-1601050690117-94f5f6af8bb4?w=600&q=80", desc: "Crispy pastry filled with spicy potatoes." },
   { id: 10, name: "Jalebi (جلیبی)", category: "Kashmir Sweet Corner", price: "400", image: "https://images.unsplash.com/photo-1589131649988-d61cc72c3d52?w=600&q=80", desc: "Sweet, deep-fried crispy spirals. Price is per 1 kg.", variants: SWEET_VARIANTS },
   { id: 11, name: "Pakoray (پکوڑے)", category: "Kashmir Sweet Corner", price: "150", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80", desc: "Crispy besan fritters mixed with vegetables." },
-  { id: 12, name: "Cold Drink (کولڈ ڈرنک)", category: "Others", price: "70", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&q=80", desc: "Chilled beverage options.", variants: [{label: 'Regular', priceMultiplier: 1}, {label: 'Half Liter', priceMultiplier: 1.5}, {label: '1 Liter', priceMultiplier: 2.2}, {label: '1.5 Liter', priceMultiplier: 2.5}] },
+  { id: 12, name: "Cold Drink (کولڈ ڈرنک)", category: "Others", price: "70", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&q=80", desc: "Chilled beverage options.", variants: DRINK_VARIANTS },
   { id: 13, name: "Mineral Water (منرل واٹر)", category: "Others", price: "70", image: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=600&q=80", desc: "Purified water.", variants: [{label: 'Regular', priceMultiplier: 1}, {label: '1.5 Liter', priceMultiplier: 1.7}] },
   { id: 14, name: "Russian Salad (رشین سلاد)", category: "Others", price: "650", image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80", desc: "Creamy salad with fruits and vegetables." },
   { id: 15, name: "Salad (سلاد)", category: "Others", price: "70", image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&q=80", desc: "Fresh seasonal vegetables." },
@@ -218,6 +226,10 @@ export const listenToMenu = (callback) => {
         // Inject sweet variants for existing Jalebi items if missing
         if (item.name && item.name.toLowerCase().includes('jalebi') && !item.variants) {
           item.variants = SWEET_VARIANTS;
+        }
+        // Inject drink variants for existing Cold Drink items
+        if (item.name && item.name.toLowerCase().includes('cold drink')) {
+          item.variants = DRINK_VARIANTS;
         }
         return item;
       });
