@@ -140,7 +140,7 @@ export default function Home() {
       )}
 
       {/* Hero Section */}
-      <div className="relative h-[75vh] bg-white overflow-hidden flex items-center justify-center pt-24 pb-12 border-b border-gray-200">
+      <div className="relative min-h-[90vh] bg-white overflow-hidden flex items-center justify-center pt-24 pb-12 border-b border-gray-200">
         <div className="relative z-10 text-center px-4 max-w-4xl mt-12 md:mt-0">
           <h2 className="text-[#D4AF37] text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
           <h1 className="text-5xl md:text-7xl font-serif text-[#111827] mb-6 leading-tight dir-rtl font-urdu">

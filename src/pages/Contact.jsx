@@ -20,7 +20,7 @@ export default function Contact() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative h-[75vh] bg-white overflow-hidden flex items-center justify-center pt-32 pb-12 border-b border-gray-200">
+      <div className="relative min-h-[90vh] bg-white overflow-hidden flex items-center justify-center pt-32 pb-12 border-b border-gray-200">
         <div className="relative z-10 text-center px-4 max-w-3xl">
           <h1 className="text-4xl sm:text-5xl font-black text-[#D4AF37] mb-1 uppercase tracking-widest font-serif">
             Get in Touch
