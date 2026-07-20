@@ -10,15 +10,19 @@ export default function About() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative min-h-[90vh] bg-white overflow-hidden flex items-center justify-center pt-32 pb-12 border-b border-gray-200">
+      <div 
+        className="relative min-h-[90vh] overflow-hidden flex items-center justify-center pt-32 pb-12 border-b border-gray-200"
+        style={{ backgroundImage: 'url(/pexels-photo-17050759.avif)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        <div className="absolute inset-0 bg-black/70"></div>
         <div className="relative z-10 text-center px-4 max-w-3xl">
           <h1 className="text-4xl sm:text-5xl font-black text-[#D4AF37] mb-1 uppercase tracking-widest font-serif">
             About Us
           </h1>
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] mb-4 font-serif" dir="rtl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 font-serif" dir="rtl">
             ہمارے بارے میں
           </h2>
-          <div className="w-16 h-1 bg-red-600 mx-auto"></div>
+          <div className="w-16 h-1 bg-[#D4AF37] mx-auto"></div>
         </div>
       </div>
 
