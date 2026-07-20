@@ -239,7 +239,7 @@ export default function Home() {
         {/* Header & Search */}
         <div className="text-center pt-10 pb-6 px-4">
           <h2 className="text-[#D4AF37] text-xs font-bold tracking-[0.3em] uppercase mb-1">Our Menu</h2>
-          <h3 className="text-3xl font-black text-[#111827] font-serif">Culinary Excellence</h3>
+          <h3 className="text-3xl font-black text-[#111827] font-serif">Amazing Taste</h3>
           <div className="w-16 h-1 bg-[#991B1B] mx-auto mt-4 mb-8"></div>
           
           {/* Search Bar */}
