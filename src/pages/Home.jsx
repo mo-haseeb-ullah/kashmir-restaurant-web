@@ -142,13 +142,19 @@ export default function Home() {
       )}
 
       {/* Hero Section */}
-      <div className="relative min-h-[90vh] bg-white overflow-hidden flex items-center justify-center pt-24 pb-12 border-b border-gray-200">
+      <div 
+        className="relative min-h-[90vh] overflow-hidden flex items-center justify-center pt-24 pb-12 border-b border-gray-200"
+        style={{ backgroundImage: 'url(/ChickenKarahi.webp)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+      >
+        {/* Dark overlay to make text readable */}
+        <div className="absolute inset-0 bg-black/60"></div>
+        
         <div className="relative z-10 text-center px-4 max-w-4xl mt-12 md:mt-0">
-          <h2 className="text-[#D4AF37] text-sm font-bold tracking-[0.3em] uppercase mb-4">Taste the Tradition</h2>
-          <h1 className="text-5xl md:text-7xl font-serif text-[#111827] mb-6 leading-tight dir-rtl font-urdu">
-            لاجواب <span className="text-red-600">دیسی</span> پکوان
+          <h2 className="text-[#D4AF37] text-sm font-bold tracking-[0.3em] uppercase mb-4 shadow-black drop-shadow-md">Taste the Tradition</h2>
+          <h1 className="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight dir-rtl font-urdu drop-shadow-lg">
+            لاجواب <span className="text-[#D4AF37]">دیسی</span> پکوان
           </h1>
-          <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto font-light leading-relaxed dir-rtl font-urdu">
+          <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed dir-rtl font-urdu drop-shadow-md">
             خوشاب کی بہترین کڑاہی، ہانڈی، اور ناشتے کے پکوان کی شاندار پیشکش۔
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
