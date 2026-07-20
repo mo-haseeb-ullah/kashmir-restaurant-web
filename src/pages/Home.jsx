@@ -283,6 +283,8 @@ export default function Home() {
                     <img 
                       src={item.image} 
                       alt={item.name} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out" 
                       onError={(e) => { e.target.style.display = 'none'; }}
                     />
