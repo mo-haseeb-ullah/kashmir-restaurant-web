@@ -208,17 +208,13 @@ export const listenToMenu = (callback) => {
       callback(parsedCache); 
     } catch(e) {}
   } else {
-    callback(defaultMenu);
+    callback([]);
   }
 
   const q = query(collection(db, 'menu'));
   const unsubscribe = onSnapshot(q, (snapshot) => {
     if (snapshot.empty) {
-      // Seed default menu to Firestore if empty
-      defaultMenu.forEach(item => {
-        setDoc(doc(db, 'menu', item.id.toString()), item);
-      });
-      callback(defaultMenu);
+      callback([]);
     } else {
       const menu = snapshot.docs.map(doc => {
         const data = doc.data();
