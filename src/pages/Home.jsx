@@ -148,8 +148,8 @@ export default function Home() {
 
       {/* Hero Section */}
       <div 
-        className="relative min-h-[90vh] overflow-hidden flex items-center justify-center pt-24 pb-12 border-b border-gray-200"
-        style={{ backgroundImage: 'url(/hero.webp)', backgroundSize: 'cover', backgroundPosition: 'center 15%' }}
+        className="relative min-h-[90vh] overflow-hidden flex items-center justify-center pt-36 pb-12 border-b border-gray-200"
+        style={{ backgroundImage: 'url(/hero.webp)', backgroundSize: 'cover', backgroundPosition: 'center 5%' }}
       >
         {/* Dark overlay to make text readable */}
         <div className="absolute inset-0 bg-black/60"></div>
