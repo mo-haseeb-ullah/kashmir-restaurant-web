@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin, Settings, LogOut, FileText, Download, RotateCcw } from 'lucide-react';
+import { ChefHat, Search, Bell, Clock, CheckCircle2, ChevronRight, CookingPot, ArrowLeft, LayoutDashboard, UtensilsCrossed, Plus, Edit2, Trash2, X, Image as ImageIcon, AlertCircle, ShoppingBag, MapPin, Settings, LogOut, FileText, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem, getAdminPasswordHash, hashPassword, updateAdminPasswordHash, defaultMenu } from '../services/db';
+import { listenToOrders, updateOrderStatus, listenToMenu, addMenuItem, updateMenuItem, deleteMenuItem, getAdminPasswordHash, hashPassword, updateAdminPasswordHash } from '../services/db';
 import { Link } from 'react-router-dom';
 
 export default function Admin() {
@@ -245,28 +245,6 @@ export default function Admin() {
       showToast("Password updated successfully!");
     } finally {
       setIsChangingPassword(false);
-    }
-  };
-
-  const handleRestoreEnglish = async () => {
-    setIsSavingMenu(true);
-    let count = 0;
-    try {
-      for (const item of menuItems) {
-        // Find original English item in defaultMenu
-        const originalItem = defaultMenu.find(d => d.id.toString() === item.id.toString() || d.name === item.name);
-        
-        if (originalItem && originalItem.desc) {
-          await updateMenuItem(item.id, { desc: originalItem.desc });
-          count++;
-        }
-      }
-      showToast(`Successfully restored English descriptions for ${count} items!`);
-    } catch(err) {
-      console.error(err);
-      showToast("Failed to restore English descriptions.", "error");
-    } finally {
-      setIsSavingMenu(false);
     }
   };
 
@@ -579,21 +557,12 @@ export default function Admin() {
                   <h3 className="text-xl md:text-2xl font-black font-serif text-[#111827]">Restaurant Menu</h3>
                   <p className="text-gray-500 text-[10px] md:text-sm mt-1">Changes made here instantly update the live website.</p>
                 </div>
-                <div className="flex gap-2 w-full md:w-auto">
-                  <button 
-                    onClick={handleRestoreEnglish}
-                    disabled={isSavingMenu}
-                    className="bg-gray-800 hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg flex-1 md:flex-auto justify-center disabled:opacity-50"
-                  >
-                    Restore English
-                  </button>
-                  <button 
-                    onClick={openAddModal}
-                    className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg flex-1 md:flex-auto justify-center"
-                  >
-                    <Plus size={16} /> Add Dish
-                  </button>
-                </div>
+                <button 
+                  onClick={openAddModal}
+                  className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg w-full md:w-auto justify-center"
+                >
+                  <Plus size={16} /> Add New Dish
+                </button>
               </div>
 
               {/* Desktop Table View */}
