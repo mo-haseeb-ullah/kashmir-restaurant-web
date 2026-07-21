@@ -146,7 +146,7 @@ const DRINK_VARIANTS = [
   { label: '2 Liter', price: 250 }
 ];
 
-const defaultMenu = [
+export const defaultMenu = [
   { id: 1, name: "Mega Deal", category: "Mega Deals", price: "5500", image: "https://images.unsplash.com/photo-1555126634-ae2306716a49?w=600&q=80", desc: "1kg Chicken Karahi, 1kg Chicken Biryani, Half kg Beef Karahi, 2 Chicken Kebabs, 2 Reshmi Kebabs, 2 Tikka Boti, 2 Malai Boti, Roti for 6, 6 Raita, 2 Salad, 2.25ltr Drink." },
   { id: 2, name: "Chicken Chana (مرغ چنے)", category: "Breakfast (صبح کا ناشته)", price: "250", image: "https://images.unsplash.com/photo-1626786015525-4fc1da939768?w=600&q=80", desc: "Delicious Lahori style chicken chickpeas." },
   { id: 3, name: "Omelette (آملیٹ)", category: "Breakfast (صبح کا ناشته)", price: "100", image: "https://images.unsplash.com/photo-1525385133512-2f3bdd039054?w=600&q=80", desc: "Spicy and fluffy traditional omelette." },
