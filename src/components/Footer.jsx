@@ -50,8 +50,8 @@ export default function Footer() {
           <div>
             <h4 className="text-luxury-gold text-sm font-bold tracking-[0.2em] uppercase mb-6">Connect</h4>
             <div className="flex gap-4 mb-8">
-              <a href="https://www.facebook.com/Kashmir.Restaurant.Official/" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg px-5 py-2 rounded-full transition font-bold text-sm flex items-center justify-center">Facebook</a>
-              <a href="https://www.tiktok.com/@tariqmehmood6119" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg px-5 py-2 rounded-full transition font-bold text-sm flex items-center justify-center">TikTok</a>
+              <a href="https://www.facebook.com/share/1B6FxabAe9/" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg px-5 py-2 rounded-full transition font-bold text-sm flex items-center justify-center">Facebook</a>
+              <a href="https://vt.tiktok.com/ZSXXSm9tq/" target="_blank" rel="noopener noreferrer" className="bg-gray-800 hover:bg-luxury-gold hover:text-luxury-bg px-5 py-2 rounded-full transition font-bold text-sm flex items-center justify-center">TikTok</a>
             </div>
             <a href={WHATSAPP_URL} className="bg-luxury-red hover:bg-luxury-red/80 text-white px-6 py-3 rounded-sm font-bold flex items-center justify-center gap-2 transition w-full uppercase tracking-widest text-sm">
               <MessageCircle size={18} />

@@ -498,23 +498,23 @@ export default function Admin() {
 
                           <div className="p-2 md:p-3 flex flex-col gap-2 flex-1">
                             <div className="space-y-1">
-                              <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Name</p><p className="font-bold text-[10px] md:text-xs text-[#111827] truncate w-16 md:w-32 text-right">{order.customer.name}</p></div>
-                              <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Phone</p><p className="font-bold text-[10px] md:text-xs text-[#111827] truncate w-16 md:w-32 text-right">{order.customer.phone}</p></div>
+                              <div className="flex justify-between gap-2"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest shrink-0">Name</p><p className="font-bold text-[10px] md:text-xs text-[#111827] text-right break-words">{order.customer.name}</p></div>
+                              <div className="flex justify-between gap-2"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest shrink-0">Phone</p><p className="font-bold text-[10px] md:text-xs text-[#111827] text-right break-words">{order.customer.phone}</p></div>
                               
                               {order.orderType === 'Delivery' && (
-                                <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Loc</p><p className="text-[9px] md:text-[10px] text-gray-600 truncate w-16 md:w-32 text-right" title={order.customer.address}>{order.customer.address}</p></div>
+                                <div className="flex justify-between gap-2"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest shrink-0">Loc</p><p className="text-[9px] md:text-[10px] text-gray-600 text-right break-words" title={order.customer.address}>{order.customer.address}</p></div>
                               )}
                               {order.orderType === 'Takeaway' && (
-                                <div className="flex justify-between"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest">Type</p><p className="font-bold text-[9px] md:text-[10px] text-[#D4AF37] uppercase">Pick-up</p></div>
+                                <div className="flex justify-between gap-2"><p className="text-[8px] md:text-[9px] font-bold text-gray-400 uppercase tracking-widest shrink-0">Type</p><p className="font-bold text-[9px] md:text-[10px] text-[#D4AF37] uppercase">Pick-up</p></div>
                               )}
                             </div>
 
                             <div className="border-t border-gray-100 pt-2 flex-1">
-                              <div className="space-y-1 max-h-24 overflow-y-auto hide-scrollbar">
+                              <div className="space-y-1">
                                 {order.items.map((item, idx) => (
-                                  <div key={idx} className="flex justify-between text-[9px] md:text-xs">
-                                    <span className="text-gray-800 truncate pr-1"><span className="text-[#D4AF37] font-bold">{item.quantity}x</span> {item.name}</span>
-                                    <span className="text-gray-600 font-bold whitespace-nowrap">Rs.{item.price * item.quantity}</span>
+                                  <div key={idx} className="flex justify-between text-[9px] md:text-xs gap-2">
+                                    <span className="text-gray-800 break-words"><span className="text-[#D4AF37] font-bold">{item.quantity}x</span> {item.name}</span>
+                                    <span className="text-gray-600 font-bold whitespace-nowrap shrink-0 mt-0.5">Rs.{item.price * item.quantity}</span>
                                   </div>
                                 ))}
                               </div>
