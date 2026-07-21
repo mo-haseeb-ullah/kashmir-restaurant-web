@@ -248,6 +248,41 @@ export default function Admin() {
     }
   };
 
+  const handleTranslateToUrdu = async () => {
+    setIsSavingMenu(true);
+    let count = 0;
+    try {
+      for (const item of menuItems) {
+        if (item.category.toLowerCase().includes('deal')) continue;
+        
+        const match = item.name.match(/\(([^)]+)\)/);
+        const urduName = match ? match[1].trim() : item.name;
+        
+        const cat = item.category.toLowerCase();
+        let urduDesc = '';
+        
+        if (cat.includes('karahi') || cat.includes('handi')) {
+          urduDesc = `روایتی مصالحوں میں تیار کردہ انتہائی مزیدار اور تازہ ${urduName}۔`;
+        } else if (cat.includes('sweet') || cat.includes('breakfast')) {
+          urduDesc = `خالص اجزاء سے تیار کردہ بہترین اور ذائقہ دار ${urduName}۔`;
+        } else if (cat.includes('drink') || cat.includes('water')) {
+          urduDesc = `انتہائی ٹھنڈا اور تازہ ${urduName}۔`;
+        } else {
+          urduDesc = `مزیدار اور تازہ ${urduName} بہترین ذائقے کے ساتھ تیار کردہ۔`;
+        }
+        
+        await updateMenuItem(item.id, { desc: urduDesc });
+        count++;
+      }
+      showToast(`Successfully translated ${count} items to Simple Urdu!`);
+    } catch(err) {
+      console.error(err);
+      showToast("Failed to translate items.", "error");
+    } finally {
+      setIsSavingMenu(false);
+    }
+  };
+
   const handleDelete = (item) => {
     setItemToDelete(item);
   };
@@ -557,12 +592,21 @@ export default function Admin() {
                   <h3 className="text-xl md:text-2xl font-black font-serif text-[#111827]">Restaurant Menu</h3>
                   <p className="text-gray-500 text-[10px] md:text-sm mt-1">Changes made here instantly update the live website.</p>
                 </div>
-                <button 
-                  onClick={openAddModal}
-                  className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg w-full md:w-auto justify-center"
-                >
-                  <Plus size={16} /> Add New Dish
-                </button>
+                <div className="flex gap-2 w-full md:w-auto">
+                  <button 
+                    onClick={handleTranslateToUrdu}
+                    disabled={isSavingMenu}
+                    className="bg-gray-800 hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg flex-1 md:flex-auto justify-center disabled:opacity-50"
+                  >
+                    Translate Urdu
+                  </button>
+                  <button 
+                    onClick={openAddModal}
+                    className="bg-[#111827] hover:bg-[#D4AF37] hover:text-[#111827] text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-bold uppercase tracking-widest text-[10px] md:text-sm transition flex items-center gap-2 shadow-lg flex-1 md:flex-auto justify-center"
+                  >
+                    <Plus size={16} /> Add Dish
+                  </button>
+                </div>
               </div>
 
               {/* Desktop Table View */}
