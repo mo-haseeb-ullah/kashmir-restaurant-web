@@ -26,7 +26,7 @@ export default function SEO({ title, description, keywords, preloadImage }) {
           "@context": "https://schema.org",
           "@type": "Restaurant",
           "name": "Kashmir Restaurant",
-          "image": "https://www.kashmirrestaurant.pk/ChickenKarahi.webp",
+          "image": "https://www.kashmirrestaurant.pk/hero.webp",
           "@id": "https://www.kashmirrestaurant.pk",
           "url": "https://www.kashmirrestaurant.pk",
           "telephone": "+923005400476",
